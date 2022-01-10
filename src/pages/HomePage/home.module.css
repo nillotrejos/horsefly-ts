@@ -1,0 +1,82 @@
+.topBar{
+    background-color: black;
+    padding: 10px;
+}
+.topHeadings{
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+.headingText{
+    margin: 10px;
+    font-size: 14px;
+    color: darkgray;
+    font-weight: 600;
+}
+.container{
+    width: 50%;
+}
+.filtersHeading{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px;
+}
+.filterTextContainer{
+    display: flex;
+    
+    font-size: 16px;
+}
+.filterText{
+    margin: 10px;
+    color: darkgray;
+}
+.filterText1{
+    margin: 10px;
+    color: black;
+}
+.selectInputContainer{
+    display: flex;
+    align-items: center;
+}
+.dropdown{
+    height: 100% ;
+    font-size: 16px;
+    margin: 5px;
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #d7dade;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 10%);
+    border-radius: 3px;
+    color: gray;
+    font-weight: 200;
+    outline: none;
+
+}
+.dropdown1{
+    height: 100% ;
+    font-size: 16px;
+    margin: 5px;
+    width: 420px;
+    padding: 10px;
+    border: 1px solid #d7dade;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 10%);
+    border-radius: 3px;
+    color: gray;
+    font-weight: 200;
+    outline: none;
+}
+.dropdown2{
+    height: 100% ;
+    font-size: 16px;
+    margin: 5px;
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #d7dade;
+    box-shadow: inset 0 1px 3px rgb(0 0 0 / 10%);
+    border-radius: 3px;
+    color: gray;
+    font-weight: 200;
+    outline: none;
+
+}
