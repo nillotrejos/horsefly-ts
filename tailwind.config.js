@@ -5,8 +5,8 @@ module.exports = {
   darkMode: false,
   theme: {
     borderColor: (theme) => ({
-      ...theme('colors'),
-      primary: '#00C4CC',
+      ...theme('colors')
+      // primary: '#00C4CC'
     }),
     boxShadow: {
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -18,7 +18,7 @@ module.exports = {
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       '3xl': 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-      none: 'none',
+      none: 'none'
     },
     fontSize: {
       xs: '0.75rem',
@@ -30,21 +30,16 @@ module.exports = {
       '3xl': '1.875rem',
       '4xl': '2.25rem',
       '5xl': '3rem',
-      '6xl': '4rem',
+      '6xl': '4rem'
     },
     extend: {
       height: {
-        26: '104px',
+        26: '104px'
       },
       margin: {
-        18: '4.5rem',
+        18: '4.5rem'
       },
       colors: {
-        gradientPrimary: '#DB9CE1',
-        primary: '#00C4CC',
-        primaryHover: '#4ca4a8',
-        primaryDark: '#058f97',
-        secondary: '#A9C9FF',
         primaryGray: '#EEEEEE',
         secondaryGrey: '#707070',
         gray: {
@@ -56,7 +51,7 @@ module.exports = {
           600: '#718096',
           700: '#4a5568',
           800: '#2d3748',
-          900: '#1a202c',
+          900: '#1a202c'
         },
         blue: {
           100: '#ebf8ff',
@@ -67,11 +62,10 @@ module.exports = {
           600: '#3182ce',
           700: '#2b6cb0',
           800: '#2c5282',
-          900: '#2a4365',
-        },
-      },
-    },
+          900: '#2a4365'
+        }
+      }
+    }
   },
-  variants: {},
-  plugins: [require('@tailwindcss/forms')],
+  variants: {}
 };
