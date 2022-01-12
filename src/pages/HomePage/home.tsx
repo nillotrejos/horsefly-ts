@@ -6,6 +6,10 @@ import SelectDropDown from '../../components/Dropdown/dropdown';
 import { COUNTRIES, RADIUS } from '../../components/utils/MOC_DATA/mocData';
 import InputField from '../../components/Input/InputField';
 import Button from '../../components/Button/button';
+import Tags from '../../components/Tags/tags';
+import { MdAddLocation, MdOutlinePlaylistAdd ,MdDonutLarge} from 'react-icons/md';
+import { VscDiscard } from 'react-icons/vsc';
+
 const HomePage = () => {
   const [inputList, setInputList] = React.useState([
     { country: '', location: '', radius: '' }
@@ -14,12 +18,9 @@ const HomePage = () => {
   const [country, setcountry] = React.useState('United Kingdom');
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
-  const [isSearchActive, setisSearchActive] = React.useState(false);
+  const [tags, setTags] = React.useState([]);
+  console.log(tags, 'tags');
 
-  const addSearchGroup = () => {
-    setisSearchActive(true);
-  };
-  
   const handleRemoveClick = (index: any) => {
     const list = [...inputList];
     list.splice(index, 1);
@@ -27,6 +28,10 @@ const HomePage = () => {
   };
   const handleAddClick = () => {
     setInputList([...inputList, { country: '', location: '', radius: '' }]);
+  };
+  const selectedTags = (tags: any) => {
+    console.log(tags, 'selectedTags');
+    setTags(tags);
   };
   return (
     <>
@@ -40,6 +45,7 @@ const HomePage = () => {
           <p className={style.headingText}> UPLOAD CVS</p>
         </div>
         <hr style={{ margin: 0, padding: 0 }} />
+
         <div className={style.filtersHeading}>
           <p className={style.filterText1}>New Search</p>
           <div className={style.filterTextContainer}>
@@ -95,6 +101,7 @@ const HomePage = () => {
                     onClick={handleAddClick}
                     title="Add location"
                     className={style.btn}
+                    icon={<MdAddLocation className={style.iconStyle} />}
                   />
                 )}
               </div>
@@ -102,33 +109,31 @@ const HomePage = () => {
           );
         })}
 
-        
         <div style={{ margin: 10 }}>
           <p className={style.search}>Search Group Options</p>
-          <InputField
-            type="text"
-            placeholder="Search keyword"
-            name="firstName"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className={style.searchGroup}
-          />
+
+          <Tags selectedTags={selectedTags} />
+
           <Button
             title="Add search group"
-            onClick={addSearchGroup}
-            className={isSearchActive ? style.btn1Active : style.btn1}
+            className={tags.length ? style.btn1Active : style.btn1}
+            icon={<MdOutlinePlaylistAdd className={style.iconStyle} />}
           />
         </div>
-        <div>
-          {isSearchActive ? (
+
+        <div className={style.bottomMainContainer}>
+          {tags.length ? (
             <div className={style.bottom}>
               <div className={style.bottomContainer}>
-                <Button title="Discard search" className={style.discardBtn} />
-                <Button title="Explore results" className={style.exploreBtn} />
+                <Button
+                  title="Discard search"
+                  icon={<VscDiscard className={style.iconStyle} />}
+                  className={style.discardBtn}
+                />
+                <Button title="Explore results" icon={<MdDonutLarge className={style.iconStyle}/>} className={style.exploreBtn} />
               </div>
             </div>
           ) : null}
-         
         </div>
       </div>
     </>

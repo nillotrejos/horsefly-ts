@@ -1,0 +1,66 @@
+.tagsInput {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0 8px;
+  border: 1px solid rgb(214, 216, 218);
+  border-radius: 6px;
+  background-color: white;
+  border: 1px solid #d7dade;
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 10%);
+  border-radius: 3px;
+  color: gray;
+  font-weight: 200;
+  outline: none;
+
+  input {
+    flex: 1;
+    border: none;
+    height: 50px;
+    font-size: 14px;
+    padding: 4px 0 0 0;
+    background-color: white;
+    &:focus {
+      outline: transparent;
+    }
+  }
+}
+
+.tagss {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  background-color: white;
+}
+
+.tag {
+  width: auto;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  color: #000000;
+  font-size: 16px;
+  list-style: none;
+  margin: 0px 8px 8px 0px;
+  background: #e6e3e3;
+  border-radius: 3px;
+  .tagTitle {
+    padding: 5px 10px;
+  }
+  .tagCloseIcon {
+    display: block;
+    width: 22px;
+    height: 100%;
+    line-height: 14px;
+    text-align: center;
+    font-size: 21px;
+    color: white;
+    background: #706f6f;
+    cursor: pointer;
+    border-radius: 3px 0px 0px 3px;
+    font-weight: 400;
+
+    justify-content: center;
+  }
+}
