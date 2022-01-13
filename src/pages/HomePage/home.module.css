@@ -7,6 +7,8 @@
   flex-direction: row;
   align-items: center;
   padding: 3px;
+
+
 }
 .headingText {
   margin: 10px;
@@ -30,16 +32,21 @@
 }
 .filterTextContainer {
   display: flex;
-
   font-size: 16px;
+
 }
 .filterText {
   margin: 10px;
   color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .filterText1 {
   margin: 10px;
   color: black;
+  display: flex;
+  align-items: center;
 }
 .selectInputContainer {
   display: flex;
@@ -221,4 +228,10 @@
 }
 .bottomMainContainer {
   margin-top: 80px;
+}
+.discardIconBtn {
+  display: flex;
+  align-items: center;
+  color: red;
+  justify-content: center;
 }

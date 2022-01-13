@@ -7,19 +7,26 @@ import { COUNTRIES, RADIUS } from '../../components/utils/MOC_DATA/mocData';
 import InputField from '../../components/Input/InputField';
 import Button from '../../components/Button/button';
 import Tags from '../../components/Tags/tags';
-import { MdAddLocation, MdOutlinePlaylistAdd ,MdDonutLarge} from 'react-icons/md';
+import {Mapbox} from '../Map/map';
+
+import {
+  MdAddLocation,
+  MdOutlinePlaylistAdd,
+  MdDonutLarge,
+  MdDoNotDisturbOn,
+  MdTune,
+  MdKeyboardArrowDown
+} from 'react-icons/md';
 import { VscDiscard } from 'react-icons/vsc';
 
 const HomePage = () => {
   const [inputList, setInputList] = React.useState([
     { country: '', location: '', radius: '' }
   ]);
-
   const [country, setcountry] = React.useState('United Kingdom');
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
   const [tags, setTags] = React.useState([]);
-  console.log(tags, 'tags');
 
   const handleRemoveClick = (index: any) => {
     const list = [...inputList];
@@ -34,23 +41,34 @@ const HomePage = () => {
     setTags(tags);
   };
   return (
-    <>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",height:"90vh"}}>
+    <div>
+
       <div className={style.topBar}>
         <Image src={Icon} width={160} height={26} />
       </div>
-      <div className={style.container}>
-        <div className={style.topHeadings}>
+      <div className={style.topHeadings}>
           <p className={style.headingText}> SEARCH BUILDER </p>
           <p className={style.headingText}> SAVED SEARCHES </p>
           <p className={style.headingText}> UPLOAD CVS</p>
         </div>
-        <hr style={{ margin: 0, padding: 0 }} />
+        <hr style={{ margin: 0, padding: 0 ,width:640 }} />
+      <div className={style.container}>
+     
 
         <div className={style.filtersHeading}>
           <p className={style.filterText1}>New Search</p>
           <div className={style.filterTextContainer}>
-            <p className={style.filterText}>Filters</p>
-            <p className={style.filterText}>GBP</p>
+              <div className={style.filterText}>
+              <MdTune/>
+              <p >Filters</p>
+              </div>
+              <div className={style.filterText}>
+           
+              <p>GBP</p>
+              <MdKeyboardArrowDown/>
+              </div>
+             
           </div>
         </div>
 
@@ -89,11 +107,16 @@ const HomePage = () => {
                     className={style.discardBtnContainer}
                     style={{ display: 'flex', justifyContent: 'flex-end' }}
                   >
-                    <Button
-                      className={style.discardInputBtn}
+                    <div
+                      className={style.discardIconBtn}
                       onClick={() => handleRemoveClick(i)}
-                      title="Discard"
-                    />
+                    >
+                      <MdDoNotDisturbOn />
+                      <Button
+                        className={style.discardInputBtn}
+                        title="Discard"
+                      />
+                    </div>
                   </div>
                 )}
                 {inputList.length - 1 === i && (
@@ -108,7 +131,6 @@ const HomePage = () => {
             </>
           );
         })}
-
         <div style={{ margin: 10 }}>
           <p className={style.search}>Search Group Options</p>
 
@@ -130,13 +152,22 @@ const HomePage = () => {
                   icon={<VscDiscard className={style.iconStyle} />}
                   className={style.discardBtn}
                 />
-                <Button title="Explore results" icon={<MdDonutLarge className={style.iconStyle}/>} className={style.exploreBtn} />
+                <Button
+                  title="Explore results"
+                  icon={<MdDonutLarge className={style.iconStyle} />}
+                  className={style.exploreBtn}
+                />
               </div>
             </div>
           ) : null}
         </div>
       </div>
-    </>
+      </div>
+    <div >
+        
+        <Mapbox/>
+    </div>
+    </div>
   );
 };
 
