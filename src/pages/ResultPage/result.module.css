@@ -1,0 +1,139 @@
+.resultHeader {
+  height: 235px;
+  width: 650px;
+  background-color: #f3f3f3;
+  box-shadow: 0 2px 6px 0 rgb(0 0 0 / 20%);
+}
+.topSection {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.topSectionContainer {
+  flex-grow: 1;
+  justify-content: center;
+  padding: 10px;
+}
+.topSectionText {
+  flex-grow: 2;
+  padding: 10px;
+}
+.TopHeading1 {
+  font-size: 12px;
+  color: gray;
+  margin-left: 10px;
+}
+.TopHeading2 {
+  font-size: 20px;
+  color: black;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 60px;
+}
+.span1 {
+  color: #3170a3;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 10px;
+}
+.span3 {
+  color: #f9a100;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 10px;
+}
+.icon {
+  color: #3170a3;
+  font-weight: bold;
+  font-size: 30px;
+}
+.icon1 {
+  color: #f9a100;
+  font-weight: bold;
+  font-size: 30px;
+}
+.span2 {
+  color: gray;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 10px;
+  text-align: center;
+}
+.headertopContainer {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 110px;
+  border-right: 1px solid lightgray;
+}
+.headertopContainer1 {
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 110px;
+  border-left: 1px solid lightgray;
+}
+.trendingText {
+  font-size: 12px;
+  margin: 3px;
+  color: black;
+  font-weight: 500;
+  margin-top: 20px;
+}
+.trendingText1 {
+  font-size: 12px;
+  margin: 3px;
+  color: black;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.trIcon1 {
+  color: #4c9059;
+  margin: 5px;
+  margin-top: 20px;
+}
+.trIcon2 {
+  color: #4c9059;
+  margin: 5px;
+  margin-bottom: 20px;
+}
+.sourcing {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.secondSection {
+  display: flex;
+  border-bottom: 1px solid lightgray;
+  padding: 5px;
+}
+.sourcingText {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4c9059;
+}
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.switch {
+  border: none;
+  outline: none;
+}
+.span4{
+    color: gray;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 10px;
+    text-align: center;
+  }

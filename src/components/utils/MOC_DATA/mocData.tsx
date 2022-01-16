@@ -37,5 +37,5 @@ export const RADIUS = [
   },
   {
     radius: '30'
-  }
+  },
 ];

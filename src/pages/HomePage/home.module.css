@@ -7,8 +7,13 @@
   flex-direction: row;
   align-items: center;
   padding: 3px;
-
-
+}
+.header {
+  display: flex;
+  height: 100vh;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
 }
 .headingText {
   margin: 10px;
@@ -18,22 +23,27 @@
   line-height: 22px;
 }
 .container {
-  width: 640px;
+  width: 100%;
   height: 90vh;
   background-color: #f9f9f9;
   overflow: auto;
   position: relative;
+  padding: 10px;
 }
 .filtersHeading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px;
+  /* margin: 10px; */
 }
 .filterTextContainer {
   display: flex;
   font-size: 16px;
-
+}
+.filterText p{
+  font-size: 14px;
+  margin:  5px;
+  color: #343638;
 }
 .filterText {
   margin: 10px;
@@ -170,7 +180,7 @@
   margin-top: 20px;
   position: fixed;
   bottom: 0px;
-  width: 640px;
+  width: 650px;
   border-top: 1px solid #dedede;
   box-shadow: 0 -1px 10px 0 rgb(0 0 0 / 10%);
 }
@@ -227,11 +237,18 @@
   color: red;
 }
 .bottomMainContainer {
-  margin-top: 80px;
+  margin-top: 120px;
 }
 .discardIconBtn {
   display: flex;
   align-items: center;
   color: red;
   justify-content: center;
+}
+.mapContainer{
+    padding: 0;
+     margin: 0;
+     width: 100%;
+     height: 100%;
+
 }

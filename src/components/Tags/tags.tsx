@@ -1,8 +1,19 @@
 import React from 'react';
 import style from './tags.module.scss';
 
-const Tags = (props: any) => {
+interface TagsProps{
+  setcount:any
+  selectedTags:any
+  setSearchGroups:any
+  value:string
+}
+
+const Tags:React.FC<TagsProps> = ({selectedTags,setcount,setSearchGroups}) => {
   const [tags, setTags] = React.useState<any>([]);
+
+  React.useEffect(()=>{
+    setcount(tags)
+  },[tags])
   const removeTags = (indexToRemove: number) => {
     setTags([
       ...tags.filter((_: any, index: number) => index !== indexToRemove)
@@ -11,7 +22,7 @@ const Tags = (props: any) => {
   const addTags = (event: any) => {
     if (event.target.value !== '') {
       setTags([...tags, event.target.value]);
-      props.selectedTags([...tags, event.target.value]);
+      selectedTags([...tags, event.target.value]);
       event.target.value = '';
     }
   };
@@ -34,6 +45,7 @@ const Tags = (props: any) => {
         type="text"
         onKeyUp={(event) => (event.key === 'Enter' ? addTags(event) : null)}
         placeholder="Search keywords"
+        onChange={(e)=>setSearchGroups(e.target.value)}
       />
     </div>
   );

@@ -5,7 +5,8 @@ interface ButtonProps{
     className? : string
     title?:string
     onClick?:()=>void
-    icon?: any
+    icon?: string
+    
 }
 const Button:React.FC<ButtonProps> = ({className,title,onClick,icon}) => {
     return (
