@@ -20,45 +20,55 @@ import {
 import { VscDiscard } from 'react-icons/vsc';
 
 const HomePage = () => {
+  const [allData, setallData] = React.useState([{}]);
   const [inputList, setInputList] = React.useState([
     { country: '', location: '', radius: '' }
   ]);
-  const [searchGroups, setSearchGroups] = React.useState([{ group: ""}]);
+  const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
   const [country, setcountry] = React.useState('United Kingdom');
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
-  const [tags, setTags] = React.useState([]);
+  const [tags, setTags] = React.useState<any>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
-  console.log(inputList, 'inputList');
-  console.log(searchGroups,'searchGroups')
+  const [groupTitle, setgroupTitle] = React.useState([]);
 
-  console.log(count, 'count1212');
+  console.log(tags, 'tags');
+  console.log(searchGroups, 'searchGroups');
+
   const exploreResult = () => {
     setIsLoading(true);
   };
 
-  const handleInputChange = (e: any, index: number) => {
-    const { name, value } = e.target;
-    // console.log(name,value,"value")
-    const list = [...inputList];
-    list[index][name] = value;
-    setInputList(list);
-  };
-
-  const handleRemoveClick = (index: any) => {
+  const handleRemoveClick = (index: number) => {
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
   };
+
   const handleAddClick = () => {
     setInputList([...inputList, { country: '', location: '', radius: '' }]);
+    const data = {
+      country,
+      location,
+      radius
+    };
+    setallData((prevData) => [...prevData, data]);
+  };
+
+  const searchGroupHandler = () => {
+    setSearchGroups([...searchGroups, { group: '' }]);
+  };
+  const searchRemoveClick = (index: any) => {
+    const list = [...searchGroups];
+    list.splice(index, 1);
+    setSearchGroups(list);
   };
   const selectedTags = (tags: any) => {
-    setTags(tags);
+    setTags((prevTags: any) => [...prevTags, tags]);
   };
   return (
-    <div style={{ overflow: 'hidden', width: '100%', height: '100vh' }}>
+    <div className={style.top} style={{}}>
       <div className={style.topBar}>
         <Image src={Icon} width={160} height={26} />
       </div>
@@ -93,13 +103,12 @@ const HomePage = () => {
                 </div>
               </div>
 
-              {inputList.map((x, i) => {
+              {inputList.map((value, i) => {
                 return (
                   <>
                     <div className={style.selectInputContainer}>
                       <SelectDropDown
                         items={COUNTRIES}
-                        selected={country}
                         className={style.dropdown}
                         handler={setcountry}
                         captionKey="name"
@@ -110,19 +119,16 @@ const HomePage = () => {
                         type="text"
                         placeholder="Location"
                         name="location"
-                        value={x.location}
-                        //   onChange={(e) => setLocation(e.target.value)}
-                        onChange={(e) => handleInputChange(e, i)}
+                        onChange={(e) => setLocation(e.target.value)}
                         className={style.dropdown1}
                       />
 
                       <SelectDropDown
                         items={RADIUS}
-                        selected={radius}
                         className={style.dropdown2}
                         handler={setradius}
                         captionKey="radius"
-                        title="radius"
+                        title="Radius"
                       />
                     </div>
                     <div className="btn-box">
@@ -160,18 +166,52 @@ const HomePage = () => {
               })}
               <div style={{ margin: 10 }}>
                 <p className={style.search}>Search Group Options</p>
-                
-                <Tags setSearchGroups={setSearchGroups} setcount={setcount} selectedTags={selectedTags} />
+                {searchGroups.map((index) => {
+                  return (
+                    <>
+                      <Tags
+                        setgroupTitle={setgroupTitle}
+                        setcount={setcount}
+                        selectedTags={selectedTags}
+                        value={''}
+                      />
+                      {searchGroups.length > 1 && (
+                        <div
+                          className={style.searchInputSection}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                          }}
+                        >
+                          <p className={style.search}>Search Group Options</p>
+
+                          <div
+                            className={style.discardIconBtn}
+                            onClick={() => searchRemoveClick(index)}
+                          >
+                            <MdDoNotDisturbOn />
+                            <Button
+                              className={style.discardInputBtn}
+                              title="Discard"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  );
+                })}
 
                 <Button
                   title="Add search group"
+                  disable={count.length < 1}
                   className={count.length ? style.btn1Active : style.btn1}
                   icon={<MdOutlinePlaylistAdd className={style.iconStyle} />}
+                  onClick={searchGroupHandler}
                 />
               </div>
 
               <div className={style.bottomMainContainer}>
-                {count.length ? (
+                {tags.length ? (
                   <div className={style.bottom}>
                     <div className={style.bottomContainer}>
                       <Button

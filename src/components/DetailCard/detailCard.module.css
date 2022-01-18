@@ -1,0 +1,56 @@
+.card_item {
+  display: block;
+  position: relative;
+  height: auto;
+  margin: 15px 10px;
+  padding: 10px 10px 8px 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 14%);
+  transition: box-shadow 0.3s ease-out;
+}
+.cardIcon1 {
+  color: #3170a3;
+  font-weight: bold;
+  font-size: 18px;
+}
+.cardIcon2 {
+  color: #f9a100;
+  font-weight: bold;
+  font-size: 18px;
+}
+.cardSpan {
+  font-size: 17px;
+  font-weight: 700;
+  color: gray;
+  margin: 10px;
+}
+.trendingText1 {
+  font-size: 12px;
+  margin: 3px;
+  color: black;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.trIcon1 {
+  color: #4c9059;
+  margin: 5px;
+  margin-top: 20px;
+}
+.trIcon2 {
+  color: #4c9059;
+  margin: 5px;
+  margin-bottom: 20px;
+}
+.topHeading {
+  font-size: 15px;
+}
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.cardSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

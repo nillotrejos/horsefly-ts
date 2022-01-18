@@ -3,6 +3,7 @@ import style from './result.module.css';
 import { FaChevronCircleLeft, FaClipboardList } from 'react-icons/fa';
 import { MdGroup, MdTrendingUp } from 'react-icons/md';
 import Switch from 'react-switch';
+import DetailCard from '../../components/DetailCard/detailCard';
 
 interface ResultPageProps {
   setIsLoading: any;
@@ -78,18 +79,11 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
           </div>
         </div>
         <div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              
-            }}
-          >
+          <div className={style.switchContainer}>
             <div />
-            <div style={{display:"flex",alignItems:"center",justifyContent:"center",width:"40%",marginLeft:90}}>
+            <div className={style.switchSection}>
               <span className={style.span4}>Annual Salary</span>
-            
+
               <Switch
                 onChange={switchHanler}
                 checked={isChecked}
@@ -100,12 +94,19 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
                 boxShadow="none"
                 activeBoxShadow="none"
                 height={20}
-                
               />
-              <span  className={style.span4}>Daily Rate</span>
+              <span className={style.span4}>Daily Rate</span>
             </div>
-            <span  className={style.span4}>Search Options</span>
+            <span className={style.span4}>Search Options</span>
           </div>
+        </div>
+        <div className={style.regions}>
+          <DetailCard />
+          <DetailCard />
+          <DetailCard />
+          <DetailCard />
+          <DetailCard />
+          <DetailCard />
         </div>
       </div>
     </div>

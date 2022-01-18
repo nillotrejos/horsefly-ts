@@ -4,7 +4,6 @@ interface InputFieldProps {
   name: string;
   placeholder: string;
   type: string;
-  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: any;
 }
@@ -14,7 +13,6 @@ const InputField = ({
   placeholder,
   type,
   onChange,
-  value,
   className
 }: InputFieldProps) => {
   return (
@@ -25,7 +23,7 @@ const InputField = ({
         className={className}
         placeholder={placeholder}
         onChange={onChange}
-        value={value}
+      
       />
     </div>
   );

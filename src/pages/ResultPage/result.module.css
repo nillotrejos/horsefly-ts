@@ -130,10 +130,56 @@
   border: none;
   outline: none;
 }
-.span4{
-    color: gray;
-    font-size: 14px;
-    font-weight: bold;
-    margin: 10px;
-    text-align: center;
-  }
+.span4 {
+  color: gray;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px;
+  text-align: center;
+}
+.regions {
+  width: 100%;
+  height: 65vh;
+  background-color: #f9f9f9;
+  overflow: auto;
+  position: relative;
+  padding: 10px;
+}
+.card_item {
+  display: block;
+  position: relative;
+  height: auto;
+  margin: 15px 10px;
+  padding: 10px 10px 8px 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 14%);
+  transition: box-shadow 0.3s ease-out;
+}
+.cardIcon1 {
+  color: #3170a3;
+  font-weight: bold;
+  font-size: 18px;
+}
+.cardIcon2 {
+  color: #f9a100;
+  font-weight: bold;
+  font-size: 18px;
+}
+.cardSpan {
+  font-size: 17px;
+  font-weight: 700;
+  color: gray;
+  margin: 10px;
+}
+.switchContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+.switchSection{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    margin-left: 90px
+}
