@@ -9,6 +9,7 @@ import Button from '../../components/Button/button';
 import Tags from '../../components/Tags/tags';
 import { Mapbox } from '../Map/map';
 import ResultPage from '../ResultPage/resultPage';
+import { getContries } from '../../Api/api';
 import {
   MdAddLocation,
   MdOutlinePlaylistAdd,
@@ -32,9 +33,16 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
-
+  console.log(count,"count")
+  console.log(groupTitle, 'groupTitle');
   console.log(tags, 'tags');
-  console.log(searchGroups, 'searchGroups');
+  React.useEffect(()=>{
+   const foo = async()=>{
+    const response = await getContries();
+  console.log(response,"resss")
+   }
+   foo()
+  },[])
 
   const exploreResult = () => {
     setIsLoading(true);

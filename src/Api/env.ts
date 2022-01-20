@@ -1,0 +1,1 @@
+export const endpoint = "http://107.21.39.157:9751/horsefly/"
