@@ -7,11 +7,13 @@ import DetailCard from '../../components/DetailCard/detailCard';
 
 interface ResultPageProps {
   setIsLoading: any;
+  resultPageData:any
 }
-const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
+const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading,resultPageData }) => {
   const [loading, setLoading] = React.useState(true);
   const [isChecked, setIsChecked] = React.useState(false);
-
+  const {totalCandidatesCount,totalAdvertsCount,totalAvgSalary,regions} = resultPageData
+console.log(resultPageData,"finalll")
   const switchHanler = () => {
     setIsChecked(!isChecked);
   };
@@ -55,7 +57,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
         </div>
         <div className={style.secondSection}>
           <div className={style.headertopContainer}>
-            <span className={style.span1}>1,833</span>
+            <span className={style.span1}>{totalCandidatesCount}</span>
             <MdGroup className={style.icon} />
             <span className={style.span2}>SEE TALENT INSIGHTS</span>
           </div>
@@ -63,7 +65,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
             <div className={style.sourcing}>
               <span className={style.trendingText}>17</span>
               <MdTrendingUp className={style.trIcon1} />
-              <span className={style.sourcingText}>£30,114</span>
+              <span className={style.sourcingText}>£{totalAvgSalary}</span>
               <MdTrendingUp className={style.trIcon2} />
               <span className={style.trendingText1}>34</span>
             </div>
@@ -73,7 +75,7 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
             </div>
           </div>
           <div className={style.headertopContainer1}>
-            <span className={style.span3}>1,833</span>
+            <span className={style.span3}>{totalAdvertsCount}</span>
             <FaClipboardList className={style.icon1} />
             <span className={style.span2}>SEE ADVERTS</span>
           </div>
@@ -101,12 +103,15 @@ const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading }) => {
           </div>
         </div>
         <div className={style.regions}>
+          {Object.values(regions).map((region,index)=>{
+            return  <DetailCard region={region} index={index}/>
+          })}
+         
+          {/* <DetailCard />
           <DetailCard />
           <DetailCard />
           <DetailCard />
-          <DetailCard />
-          <DetailCard />
-          <DetailCard />
+          <DetailCard /> */}
         </div>
       </div>
     </div>

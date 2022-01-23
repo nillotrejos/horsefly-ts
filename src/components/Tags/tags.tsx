@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 import style from './tags.module.scss';
 
 interface TagsProps {
@@ -9,7 +9,7 @@ interface TagsProps {
   getSkills?: any;
   setgetSkills: any;
   groupTitle?: any;
-  setallTagsData:any
+  setallTagsData: any;
 }
 
 const Tags: React.FC<TagsProps> = ({
@@ -27,7 +27,7 @@ const Tags: React.FC<TagsProps> = ({
 
   React.useEffect(() => {
     setcount(tags);
-    setallTagsData(allTags)
+    setallTagsData(allTags);
   }, [tags]);
   const removeTags = (indexToRemove: number) => {
     setTags([
@@ -43,13 +43,14 @@ const Tags: React.FC<TagsProps> = ({
     }
   };
   const addSkills = (tag: any) => {
-    ref.current.value = "";
+    ref.current.value = '';
     setallTags((prevData: any) => [...prevData, tag]);
     setTags([...tags, tag.keyword]);
     selectedTags([...tags, tag.keyword]);
     setgroupTitle(null);
     setgetSkills(null);
   };
+  
   return (
     <>
       <div className={style.tagsInput}>
@@ -74,17 +75,23 @@ const Tags: React.FC<TagsProps> = ({
           ref={ref}
         />
       </div>
-    
-      {groupTitle?.length &&
-        getSkills?.map((skill: any, index: any) => {
-          return (
-            <div key={index} className={style.skillDropdown}>
-              <button className={style.button} onClick={() => addSkills(skill)}>
-                {skill?.keyword}
-              </button>
-            </div>
-          );
-        })}
+      {getSkills?.length ? (
+        <div style={{ maxHeight: 200, overflow: 'scroll' }}>
+          {groupTitle?.length &&
+            getSkills?.map((skill: any, index: any) => {
+              return (
+                <div key={index} className={style.skillDropdown}>
+                  <button
+                    className={style.button}
+                    onClick={() => addSkills(skill)}
+                  >
+                    {skill?.keyword}
+                  </button>
+                </div>
+              );
+            })}
+        </div>
+      ) : null}
     </>
   );
 };

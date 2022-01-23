@@ -12,6 +12,7 @@ interface SelectDropDownProps {
   disable?: boolean;
   selected?: string;
   title?:string
+  extra?:string
 }
 
 const SelectDropDown = ({
@@ -21,7 +22,7 @@ const SelectDropDown = ({
   items,
   disable,
   selected,
-  title
+  extra
 }: SelectDropDownProps) => {
   return (
     <select
@@ -30,13 +31,11 @@ const SelectDropDown = ({
       onChange={(e) => handler(e.target.value)}
       value={selected}
     >
-      <option value="" disabled >
-        {title}
-      </option>
+     
       {items.map((item: ItemProps) => (
    
         <option  key={item?.name} value={item?.code}>
-          {item?.name }
+          {item?.name } {extra? extra:null}
         </option>
       ))}
     </select>

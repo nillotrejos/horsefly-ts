@@ -60,12 +60,19 @@
 .filterCitiesContainer{
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 20px;
+  position: absolute;
+  top: 40px;
   padding: 5px;
-  width: 52%
+  width: 100%
 }
+.currencyDropdown{
+  width: 60px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #888;
 
+}
 .filterText {
   margin: 10px;
   color: #888;

@@ -3,7 +3,7 @@ import style from './home.module.css';
 import Image from 'next/image';
 import Icon from '../../../public/assets/horsefly.png';
 import SelectDropDown from '../../components/Dropdown/dropdown';
-import { RADIUS } from '../../components/utils/MOC_DATA/mocData';
+import { CURRENCY, RADIUS } from '../../components/utils/MOC_DATA/mocData';
 import InputField from '../../components/Input/InputField';
 import Button from '../../components/Button/button';
 import Tags from '../../components/Tags/tags';
@@ -31,6 +31,7 @@ const HomePage = () => {
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
   const [tags, setTags] = React.useState<any>([]);
+  const [currency, setCurrency] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
@@ -41,7 +42,8 @@ const HomePage = () => {
   const [filterBoxData, setfilterBoxData] = React.useState('');
   const [selectLocationData, setSelectLocationData] = React.useState('');
   const [allTagsData, setallTagsData] = React.useState([]);
-
+  const [resultPageData, setresultPageData] = React.useState([]);
+  console.log(currency, 'currency');
   const locationData = (cities: any) => {
     setLocation(cities?.displayName);
     setSelectLocationData(cities);
@@ -76,7 +78,7 @@ const HomePage = () => {
   }, []);
 
   const exploreResult = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const exploreData = {
       selectLocationData,
       filterBoxData,
@@ -89,9 +91,11 @@ const HomePage = () => {
       selectLocationData,
       filterBoxData,
       allTagsData,
-      country
+      country,
+      currency
     );
-    console.log(res);
+    setresultPageData(res)
+    console.log(res,"ressss===>>>>");
   };
 
   const handleRemoveClick = (index: number) => {
@@ -131,7 +135,7 @@ const HomePage = () => {
         {isLoading ? (
           <>
             <div style={{ width: '100%' }}>
-              <ResultPage setIsLoading={setIsLoading} />
+              <ResultPage setIsLoading={setIsLoading} resultPageData={resultPageData} />
             </div>
           </>
         ) : (
@@ -154,8 +158,12 @@ const HomePage = () => {
                     </button>
                   </div>
                   <div className={style.filterText}>
-                    <p>GBP</p>
-                    <MdKeyboardArrowDown />
+                    <SelectDropDown
+                      items={CURRENCY}
+                      className={style.currencyDropdown}
+                      handler={setCurrency}
+                      title={currency}
+                    />
                   </div>
                 </div>
               </div>
@@ -172,7 +180,13 @@ const HomePage = () => {
                         handler={setcountry}
                         title={country}
                       />
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          position: 'relative'
+                        }}
+                      >
                         <InputField
                           type="text"
                           placeholder="Location"
@@ -208,6 +222,7 @@ const HomePage = () => {
                         handler={setradius}
                         captionKey="radius"
                         title="Radius"
+                        extra="mi"
                       />
                     </div>
                     <div className="btn-box">
@@ -258,29 +273,6 @@ const HomePage = () => {
                         groupTitle={groupTitle}
                         setallTagsData={setallTagsData}
                       />
-                      {/* {getSkills.length && groupTitle.length > 2 &&
-                          getSkills?.map((skill, index) => {
-                            return (
-                              <div
-                                key={index}
-                                style={{
-                                  borderRadius: '3px',
-                                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-                                  background: 'rgba(255, 255, 255, 0.9)',
-                                  padding: '2px 0',
-                                  fontSize: '90%',
-                                  
-                                }}
-                              >
-                                <button style={{backgroundColor:"transparent",border:"none",outline:"none"}}
-                                 onClick={()=>selectedTags(skill?.keyword)}
-                                >
-                                {skill?.keyword}
-                                </button>
-                               
-                              </div>
-                            );
-                          })} */}
                       {searchGroups.length > 1 && (
                         <div
                           className={style.searchInputSection}
