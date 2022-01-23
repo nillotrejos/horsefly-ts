@@ -1,4 +1,5 @@
 interface ItemProps {
+  code: string | number | readonly string[] | undefined;
   id: number | string;
   name: string;
 }
@@ -33,8 +34,9 @@ const SelectDropDown = ({
         {title}
       </option>
       {items.map((item: ItemProps) => (
-        <option  key={item["id"]} value={item["id"]}>
-          {(item as any)[captionKey]}
+   
+        <option  key={item?.name} value={item?.code}>
+          {item?.name }
         </option>
       ))}
     </select>

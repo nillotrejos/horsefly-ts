@@ -3,13 +3,13 @@ import style from './home.module.css';
 import Image from 'next/image';
 import Icon from '../../../public/assets/horsefly.png';
 import SelectDropDown from '../../components/Dropdown/dropdown';
-import { COUNTRIES, RADIUS } from '../../components/utils/MOC_DATA/mocData';
+import { RADIUS } from '../../components/utils/MOC_DATA/mocData';
 import InputField from '../../components/Input/InputField';
 import Button from '../../components/Button/button';
 import Tags from '../../components/Tags/tags';
 import { Mapbox } from '../Map/map';
 import ResultPage from '../ResultPage/resultPage';
-import { getContries } from '../../Api/api';
+import { getContries, getCities, getTags, demand } from '../../Api/api';
 import {
   MdAddLocation,
   MdOutlinePlaylistAdd,
@@ -19,6 +19,7 @@ import {
   MdKeyboardArrowDown
 } from 'react-icons/md';
 import { VscDiscard } from 'react-icons/vsc';
+import { FilterBox } from '../../components/FilterBox/filterBox';
 
 const HomePage = () => {
   const [allData, setallData] = React.useState([{}]);
@@ -26,26 +27,71 @@ const HomePage = () => {
     { country: '', location: '', radius: '' }
   ]);
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
-  const [country, setcountry] = React.useState('United Kingdom');
+  const [country, setcountry] = React.useState('');
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
   const [tags, setTags] = React.useState<any>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
-  console.log(count,"count")
-  console.log(groupTitle, 'groupTitle');
-  console.log(tags, 'tags');
-  React.useEffect(()=>{
-   const foo = async()=>{
-    const response = await getContries();
-  console.log(response,"resss")
-   }
-   foo()
-  },[])
+  const [allCountries, setAllCountries] = React.useState(['uk']);
+  const [filterCities, setFilterCities] = React.useState([]);
+  const [getSkills, setgetSkills] = React.useState([]);
+  const [filterBox, setFilterBox] = React.useState(false);
+  const [filterBoxData, setfilterBoxData] = React.useState('');
+  const [selectLocationData, setSelectLocationData] = React.useState('');
+  const [allTagsData, setallTagsData] = React.useState([]);
 
-  const exploreResult = () => {
-    setIsLoading(true);
+  const locationData = (cities: any) => {
+    setLocation(cities?.displayName);
+    setSelectLocationData(cities);
+    setFilterCities(null);
+  };
+  const getCountries = async () => {
+    const response = await getContries();
+    setAllCountries(response);
+  };
+  const getCitiesData = async () => {
+    const response = await getCities(country, location);
+    setFilterCities(response);
+  };
+  const getSkillsData = async () => {
+    if (groupTitle?.length > 2) {
+      const response = await getTags(groupTitle);
+      setgetSkills(response);
+    }
+    return null;
+  };
+
+  React.useEffect(() => {
+    getCitiesData();
+  }, [location.length]);
+
+  React.useEffect(() => {
+    getSkillsData();
+  }, [groupTitle]);
+
+  React.useEffect(() => {
+    getCountries();
+  }, []);
+
+  const exploreResult = async () => {
+    // setIsLoading(true);
+    const exploreData = {
+      selectLocationData,
+      filterBoxData,
+      allTagsData,
+      allData,
+      country
+    };
+    console.log(exploreData, 'exploreData');
+    const res = await demand(
+      selectLocationData,
+      filterBoxData,
+      allTagsData,
+      country
+    );
+    console.log(res);
   };
 
   const handleRemoveClick = (index: number) => {
@@ -58,7 +104,7 @@ const HomePage = () => {
     setInputList([...inputList, { country: '', location: '', radius: '' }]);
     const data = {
       country,
-      location,
+      selectLocationData,
       radius
     };
     setallData((prevData) => [...prevData, data]);
@@ -96,13 +142,16 @@ const HomePage = () => {
               <p className={style.headingText}> UPLOAD CVS</p>
             </div>
             <hr style={{ margin: 0, padding: 0, width: 640 }} />
+
             <div className={style.container}>
               <div className={style.filtersHeading}>
                 <p className={style.filterText1}>New Search</p>
                 <div className={style.filterTextContainer}>
                   <div className={style.filterText}>
                     <MdTune />
-                    <p>Filters</p>
+                    <button onClick={() => setFilterBox(!filterBox)}>
+                      Filters
+                    </button>
                   </div>
                   <div className={style.filterText}>
                     <p>GBP</p>
@@ -110,26 +159,48 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-
-              {inputList.map((value, i) => {
+              {filterBox ? (
+                <FilterBox setfilterBoxData={setfilterBoxData} />
+              ) : null}
+              {inputList?.map((value, i) => {
                 return (
                   <>
-                    <div className={style.selectInputContainer}>
+                    <div key={i} className={style.selectInputContainer}>
                       <SelectDropDown
-                        items={COUNTRIES}
+                        items={allCountries}
                         className={style.dropdown}
                         handler={setcountry}
-                        captionKey="name"
                         title={country}
                       />
-
-                      <InputField
-                        type="text"
-                        placeholder="Location"
-                        name="location"
-                        onChange={(e) => setLocation(e.target.value)}
-                        className={style.dropdown1}
-                      />
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <InputField
+                          type="text"
+                          placeholder="Location"
+                          name="location"
+                          onChange={(e) => setLocation(e.target.value)}
+                          className={style.dropdown1}
+                          value={location}
+                        />
+                        <div className={style.filterCitiesContainer}>
+                          {filterCities?.length > 1 &&
+                            location.length > 1 &&
+                            filterCities?.map((cities, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={style.skillDropdown}
+                                >
+                                  <button
+                                    className={style.locationButton}
+                                    onClick={() => locationData(cities)}
+                                  >
+                                    {cities?.displayName}
+                                  </button>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </div>
 
                       <SelectDropDown
                         items={RADIUS}
@@ -176,13 +247,40 @@ const HomePage = () => {
                 <p className={style.search}>Search Group Options</p>
                 {searchGroups.map((index) => {
                   return (
-                    <>
+                    <div key={index}>
                       <Tags
                         setgroupTitle={setgroupTitle}
                         setcount={setcount}
                         selectedTags={selectedTags}
                         value={''}
+                        getSkills={getSkills}
+                        setgetSkills={setgetSkills}
+                        groupTitle={groupTitle}
+                        setallTagsData={setallTagsData}
                       />
+                      {/* {getSkills.length && groupTitle.length > 2 &&
+                          getSkills?.map((skill, index) => {
+                            return (
+                              <div
+                                key={index}
+                                style={{
+                                  borderRadius: '3px',
+                                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+                                  background: 'rgba(255, 255, 255, 0.9)',
+                                  padding: '2px 0',
+                                  fontSize: '90%',
+                                  
+                                }}
+                              >
+                                <button style={{backgroundColor:"transparent",border:"none",outline:"none"}}
+                                 onClick={()=>selectedTags(skill?.keyword)}
+                                >
+                                {skill?.keyword}
+                                </button>
+                               
+                              </div>
+                            );
+                          })} */}
                       {searchGroups.length > 1 && (
                         <div
                           className={style.searchInputSection}
@@ -205,7 +303,7 @@ const HomePage = () => {
                           </div>
                         </div>
                       )}
-                    </>
+                    </div>
                   );
                 })}
 

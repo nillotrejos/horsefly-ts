@@ -21,21 +21,21 @@ export const COUNTRIES = [
 ];
 export const RADIUS = [
   {
-    radius: '5'
+    name: '5'
   },
   {
-    radius: '10'
+    name: '10'
   },
   {
-    radius: '15'
+    name: '15'
   },
   {
-    radius: '20'
+    name: '20'
   },
   {
-    radius: '25'
+    name: '25'
   },
   {
-    radius: '30'
+    name: '30'
   },
 ];

@@ -6,6 +6,7 @@ interface InputFieldProps {
   type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: any;
+  value:any
 }
 
 const InputField = ({
@@ -13,7 +14,8 @@ const InputField = ({
   placeholder,
   type,
   onChange,
-  className
+  className,
+  value
 }: InputFieldProps) => {
   return (
     <div className="form-group">
@@ -23,6 +25,8 @@ const InputField = ({
         className={className}
         placeholder={placeholder}
         onChange={onChange}
+        value={value}
+        autoComplete='off'
       
       />
     </div>

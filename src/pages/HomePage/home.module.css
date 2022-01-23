@@ -50,6 +50,22 @@
   margin: 5px;
   color: #343638;
 }
+.filterText button{
+  font-size: 14px;
+  margin: 5px;
+  color: #343638;
+  background-color: transparent;
+  border: none;
+}
+.filterCitiesContainer{
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 20px;
+  padding: 5px;
+  width: 52%
+}
+
 .filterText {
   margin: 10px;
   color: #888;
@@ -255,4 +271,29 @@
   margin: 0;
   width: 100%;
   height: 100%;
+}
+
+
+.skillDropdown {
+  border-radius: 3px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 0;
+  font-size: 90%;
+  padding: 2px;
+
+}
+.skillDropdown:hover {
+  background-color: #f0f5f5;
+}
+.locationButton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-weight: 400;
+  font-size: 14px;
+  color: gray;
+  padding: 5px;
+
+
 }
