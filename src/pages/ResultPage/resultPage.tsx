@@ -22,11 +22,8 @@ console.log(resultPageData,"finalll")
     setIsLoading(setIsLoading(true));
   };
   React.useEffect(() => {
-    console.log('chl 1');
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
+  resultPageData.countryCount ? setLoading(false) :null
+  }, [resultPageData]);
 
   if (loading) {
     return (
@@ -103,15 +100,10 @@ console.log(resultPageData,"finalll")
           </div>
         </div>
         <div className={style.regions}>
-          {Object.values(regions).map((region,index)=>{
+          {Object.values(regions)?.map((region,index)=>{
             return  <DetailCard region={region} index={index}/>
           })}
-         
-          {/* <DetailCard />
-          <DetailCard />
-          <DetailCard />
-          <DetailCard />
-          <DetailCard /> */}
+
         </div>
       </div>
     </div>

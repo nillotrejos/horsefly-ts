@@ -27,7 +27,7 @@ const HomePage = () => {
     { country: '', location: '', radius: '' }
   ]);
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
-  const [country, setcountry] = React.useState('');
+  const [country, setcountry] = React.useState('uk');
   const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
   const [tags, setTags] = React.useState<any>([]);
@@ -43,6 +43,8 @@ const HomePage = () => {
   const [selectLocationData, setSelectLocationData] = React.useState('');
   const [allTagsData, setallTagsData] = React.useState([]);
   const [resultPageData, setresultPageData] = React.useState([]);
+  const [tagsSuggestions, settagsSuggestions] = React.useState<any>([]);
+
   console.log(currency, 'currency');
   const locationData = (cities: any) => {
     setLocation(cities?.displayName);
@@ -272,6 +274,7 @@ const HomePage = () => {
                         setgetSkills={setgetSkills}
                         groupTitle={groupTitle}
                         setallTagsData={setallTagsData}
+                        // settagsSuggestions={settagsSuggestions}
                       />
                       {searchGroups.length > 1 && (
                         <div

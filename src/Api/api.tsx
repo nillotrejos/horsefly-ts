@@ -28,9 +28,22 @@ export const getContries = async () => {
    return res.json()
   }
 
-  export const demand = async (location:any,filterBox:any,tagData:any,country:any,currency:any) => {
+  export const suggestionTag = async (allTags: any) => {
+    const tags = JSON.stringify(allTags)
+    const url = `${endpoint}suggestions/testKeywordSuggestions`;
+    const body = new FormData();
+    body.append("token", token);
+    body.append("tags", tags);
   
+    const res = await fetch(url, {
+        method: "POST",
+        body,
+      });
+   return res.json()
+  }
 
+  export const demand = async (location:any,filterBox:any,tagData:any,country:any,currency:any) => {
+ 
     const locationData = JSON.stringify([{"subContinent":"south asia","country":"in","region":"west bengal","city":"kolkata","locationId":"fa0daf330d0b1e41782eb05feca8b7d8","radius":"0"}])
     const filter = JSON.stringify(filterBox)
     const tag = JSON.stringify(  {"or":[{"include":1,"keywords":tagData}]})
@@ -53,7 +66,6 @@ export const getContries = async () => {
     const url = `${endpoint}suggestions/testKeywordNames?keyword=${groupTitle}`;
     const body = new FormData();
     body.append("token", token);
-
     const res = await fetch(url, {
       method: 'get',
   })

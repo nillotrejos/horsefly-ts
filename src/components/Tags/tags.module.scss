@@ -44,6 +44,19 @@
 .skillDropdown:hover {
   background-color: #f0f5f5;
 }
+.suggestionsButton{
+  margin: 8px 8px 0 0;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-top: 1px solid #e6e6e6;
+  border-left: 1px solid #e6e6e6;
+  border-radius: 3px;
+  background-color: #f3f3f3;
+  color: #333;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 22px;
+}
 .dropDownContainer {
   margin: 5px;
   padding: 5px;

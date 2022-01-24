@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { suggestionTag } from '../../Api/api';
 import style from './tags.module.scss';
 
 interface TagsProps {
@@ -10,6 +11,7 @@ interface TagsProps {
   setgetSkills: any;
   groupTitle?: any;
   setallTagsData: any;
+  // settagsSuggestions:any
 }
 
 const Tags: React.FC<TagsProps> = ({
@@ -20,10 +22,24 @@ const Tags: React.FC<TagsProps> = ({
   setgetSkills,
   groupTitle,
   setallTagsData
+  // settagsSuggestions
 }) => {
   const [tags, setTags] = React.useState<any>([]);
   const [allTags, setallTags] = React.useState<any>([]);
+  const [tagsSuggestions, settagsSuggestions] = React.useState<any>([]);
   const ref = useRef<any>();
+  console.log(tags, 'tagsssss');
+  console.log(allTags, 'allTags');
+
+  const suggestionTagData = async () => {
+    const response = await suggestionTag(allTags);
+    settagsSuggestions(response);
+    console.log(response, 'seggg');
+  };
+
+  React.useEffect(() => {
+    suggestionTagData();
+  }, [allTags]);
 
   React.useEffect(() => {
     setcount(tags);
@@ -50,7 +66,7 @@ const Tags: React.FC<TagsProps> = ({
     setgroupTitle(null);
     setgetSkills(null);
   };
-  
+
   return (
     <>
       <div className={style.tagsInput}>
@@ -75,8 +91,23 @@ const Tags: React.FC<TagsProps> = ({
           ref={ref}
         />
       </div>
+      {tagsSuggestions?.length && !getSkills?.length ? (
+        <div style={{zIndex:0}}>
+          {tagsSuggestions?.map((skill: any, index: any) => { 
+            return (
+              <button
+                className={style.suggestionsButton}
+                onClick={() => addSkills(skill)}
+              >
+                {skill?.keyword}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+
       {getSkills?.length ? (
-        <div style={{ maxHeight: 200, overflow: 'scroll' }}>
+        <div style={{ maxHeight: 200, overflow: 'scroll',zIndex:1 }}>
           {groupTitle?.length &&
             getSkills?.map((skill: any, index: any) => {
               return (

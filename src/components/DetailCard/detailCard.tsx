@@ -9,12 +9,13 @@ interface DetailCardProps {
 }
 
 const DetailCard: React.FC<DetailCardProps> = ({ region }, index) => {
-  const { avgSalary, candidatesCount, advertsCount } = region;
+
+  const { avgSalary, candidatesCount, advertsCount ,cityName} = region;
   return (
     <div>
       <div className={style.card_item}>
         <div>
-          <span className={style.topHeading}>East Midland</span>
+          <span className={style.topHeading}>{cityName}</span>
           <div className={style.cardContainer}>
             <div className={style.cardSection}>
               <MdGroup className={style.cardIcon1} />
