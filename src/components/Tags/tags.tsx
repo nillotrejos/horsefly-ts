@@ -21,43 +21,49 @@ const Tags: React.FC<TagsProps> = ({
   getSkills,
   setgetSkills,
   groupTitle,
-  setallTagsData
+  setallTagsData,
   // settagsSuggestions
 }) => {
   const [tags, setTags] = React.useState<any>([]);
   const [allTags, setallTags] = React.useState<any>([]);
   const [tagsSuggestions, settagsSuggestions] = React.useState<any>([]);
   const ref = useRef<any>();
-  console.log(tags, 'tagsssss');
   console.log(allTags, 'allTags');
 
   const suggestionTagData = async () => {
     const response = await suggestionTag(allTags);
     settagsSuggestions(response);
-    console.log(response, 'seggg');
   };
 
   React.useEffect(() => {
     suggestionTagData();
-  }, [allTags]);
+  }, [allTags.length]);
 
   React.useEffect(() => {
     setcount(tags);
     setallTagsData(allTags);
   }, [tags]);
+
   const removeTags = (indexToRemove: number) => {
     setTags([
       ...tags.filter((_: any, index: number) => index !== indexToRemove)
     ]);
+    setallTags([
+      ...allTags.filter((_: any, index: number) => index !== indexToRemove)
+    ])
+
   };
   const addTags = (event: any) => {
+    const tag= {"keyword":event.target.value,"type":"unknown"}
+  
     if (event.target.value !== '') {
       setTags([...tags, event.target.value]);
-      setallTags((prevData: any) => [...prevData, groupTitle]);
+      setallTags((prevData: any) => [...prevData, tag]);
       selectedTags([...tags, event.target.value]);
       event.target.value = '';
     }
   };
+
   const addSkills = (tag: any) => {
     ref.current.value = '';
     setallTags((prevData: any) => [...prevData, tag]);
@@ -96,6 +102,7 @@ const Tags: React.FC<TagsProps> = ({
           {tagsSuggestions?.map((skill: any, index: any) => { 
             return (
               <button
+              key={index}
                 className={style.suggestionsButton}
                 onClick={() => addSkills(skill)}
               >
@@ -107,7 +114,7 @@ const Tags: React.FC<TagsProps> = ({
       ) : null}
 
       {getSkills?.length ? (
-        <div style={{ maxHeight: 200, overflow: 'scroll',zIndex:1 }}>
+        <div style={{ maxHeight: 200, overflow: 'scroll' }}>
           {groupTitle?.length &&
             getSkills?.map((skill: any, index: any) => {
               return (

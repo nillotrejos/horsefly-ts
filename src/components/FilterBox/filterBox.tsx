@@ -5,17 +5,31 @@ interface FilterBoxProps {
   setfilterBoxData?: any;
 }
 export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
-  const [male, setmale] = React.useState(true);
-  const [female, setfemale] = React.useState(true);
-  const [yoe0, setyoe0] = React.useState(true);
-  const [yoe1, setyoe1] = React.useState(true);
-  const [yoe2, setyoe2] = React.useState(true);
-  const [wfOnly, setwfOnly] = React.useState(false);
+  const [maleCheckBox, setmale] = React.useState(true);
+  const [femaleCheckBox, setfemale] = React.useState(true);
+  const [yoe0CheckBox, setyoe0] = React.useState(true);
+  const [yoe1CheckBox, setyoe1] = React.useState(true);
+  const [yoe2CheckBox, setyoe2] = React.useState(true);
+  const [wfOnlyCheckBox, setwfOnly] = React.useState(false);
 
   React.useEffect(() => {
+    const male = maleCheckBox ? 1 : 0;
+    const female = femaleCheckBox ? 1 : 0;
+    const yoe0 = yoe0CheckBox ? 1 : 0;
+    const yoe1 = yoe1CheckBox ? 1 : 0;
+    const yoe2 = yoe2CheckBox ? 1 : 0;
+    const wfOnly = wfOnlyCheckBox ? 1 : 0;
     const data = { male, female, yoe0, yoe1, yoe2, wfOnly };
+
     setfilterBoxData(data);
-  }, [male, female, yoe0, yoe1, yoe2, wfOnly]);
+  }, [
+    maleCheckBox,
+    femaleCheckBox,
+    yoe0CheckBox,
+    yoe1CheckBox,
+    yoe2CheckBox,
+    wfOnlyCheckBox
+  ]);
 
   return (
     <div>
@@ -27,8 +41,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
             <input
               type="checkbox"
               id="male"
-              checked={male}
-              onChange={() => setmale(!male)}
+              checked={maleCheckBox}
+              onChange={() => setmale(!maleCheckBox)}
             />
             Male
           </label>
@@ -36,8 +50,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
             <input
               type="checkbox"
               id="Female"
-              checked={female}
-              onChange={() => setfemale(!female)}
+              checked={femaleCheckBox}
+              onChange={() => setfemale(!femaleCheckBox)}
             />
             Female
           </label>
@@ -51,8 +65,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
               type="checkbox"
               name="0-3"
               id="0-3 years"
-              checked={yoe0}
-              onChange={() => setyoe0(!yoe0)}
+              checked={yoe0CheckBox}
+              onChange={() => setyoe0(!yoe0CheckBox)}
             />
             0-3 years
           </label>
@@ -61,8 +75,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
               type="checkbox"
               name="4-7"
               id="4-7 years"
-              checked={yoe1}
-              onChange={() => setyoe1(!yoe1)}
+              checked={yoe1CheckBox}
+              onChange={() => setyoe1(!yoe1CheckBox)}
             />
             4-7 years
           </label>
@@ -71,8 +85,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
               type="checkbox"
               name="8+"
               id="8+ years"
-              checked={yoe2}
-              onChange={() => setyoe2(!yoe2)}
+              checked={yoe2CheckBox}
+              onChange={() => setyoe2(!yoe2CheckBox)}
             />
             8+ years
           </label>
@@ -85,8 +99,8 @@ export const FilterBox: React.FC<FilterBoxProps> = ({ setfilterBoxData }) => {
             <input
               type="checkbox"
               id=" Workforce"
-              checked={wfOnly}
-              onChange={() => setwfOnly(!wfOnly)}
+              checked={wfOnlyCheckBox}
+              onChange={() => setwfOnly(!wfOnlyCheckBox)}
             />
             Workforce
           </label>

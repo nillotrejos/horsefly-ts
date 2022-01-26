@@ -16,12 +16,10 @@ interface SelectDropDownProps {
 }
 
 const SelectDropDown = ({
-  captionKey,
   handler,
   className,
   items,
   disable,
-  selected,
   extra
 }: SelectDropDownProps) => {
   return (
@@ -29,11 +27,9 @@ const SelectDropDown = ({
       className={className}
       disabled={disable}
       onChange={(e) => handler(e.target.value)}
-      value={selected}
     >
      
-      {items.map((item: ItemProps) => (
-   
+      {items?.map((item: ItemProps) => (
         <option  key={item?.name} value={item?.code}>
           {item?.name } {extra? extra:null}
         </option>

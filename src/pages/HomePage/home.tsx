@@ -273,8 +273,8 @@ const HomePage = () => {
                         getSkills={getSkills}
                         setgetSkills={setgetSkills}
                         groupTitle={groupTitle}
-                        setallTagsData={setallTagsData}
-                        // settagsSuggestions={settagsSuggestions}
+                        setallTagsData={setallTagsData}    
+                                            // settagsSuggestions={settagsSuggestions}
                       />
                       {searchGroups.length > 1 && (
                         <div
