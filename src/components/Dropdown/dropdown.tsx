@@ -29,8 +29,8 @@ const SelectDropDown = ({
       onChange={(e) => handler(e.target.value)}
     >
      
-      {items?.map((item: ItemProps) => (
-        <option  key={item?.name} value={item?.code}>
+      {items?.map((item: ItemProps,index:number) => (
+        <option  key={index} value={item?.code}>
           {item?.name } {extra? extra:null}
         </option>
       ))}

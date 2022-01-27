@@ -11,38 +11,40 @@ interface TagsProps {
   setgetSkills: any;
   groupTitle?: any;
   setallTagsData: any;
-  // settagsSuggestions:any
+  selectListTag:any
+  settagsSuggestionList:any
 }
 
 const Tags: React.FC<TagsProps> = ({
   selectedTags,
   setcount,
   setgroupTitle,
-  getSkills,
   setgetSkills,
-  groupTitle,
   setallTagsData,
-  // settagsSuggestions
+  selectListTag,
+  settagsSuggestionList
 }) => {
   const [tags, setTags] = React.useState<any>([]);
   const [allTags, setallTags] = React.useState<any>([]);
-  const [tagsSuggestions, settagsSuggestions] = React.useState<any>([]);
   const ref = useRef<any>();
-  console.log(allTags, 'allTags');
 
   const suggestionTagData = async () => {
     const response = await suggestionTag(allTags);
-    settagsSuggestions(response);
+    settagsSuggestionList(response);
   };
+  React.useEffect(() => {
+    addSkills(selectListTag)
+  }, [selectListTag]);
+
 
   React.useEffect(() => {
     suggestionTagData();
-  }, [allTags.length]);
+  }, [allTags]);
 
   React.useEffect(() => {
     setcount(tags);
     setallTagsData(allTags);
-  }, [tags]);
+  }, [tags.length]);
 
   const removeTags = (indexToRemove: number) => {
     setTags([
@@ -50,12 +52,10 @@ const Tags: React.FC<TagsProps> = ({
     ]);
     setallTags([
       ...allTags.filter((_: any, index: number) => index !== indexToRemove)
-    ])
-
+    ]);
   };
   const addTags = (event: any) => {
-    const tag= {"keyword":event.target.value,"type":"unknown"}
-  
+    const tag = { keyword: event.target.value, type: 'unknown' };
     if (event.target.value !== '') {
       setTags([...tags, event.target.value]);
       setallTags((prevData: any) => [...prevData, tag]);
@@ -77,15 +77,17 @@ const Tags: React.FC<TagsProps> = ({
     <>
       <div className={style.tagsInput}>
         <ul className={style.tagss}>
-          {tags?.map((tag: string, index: number) => (
+          {allTags?.map((tag: string, index: number) => (
             <li key={index} className={style.tag}>
               <span
-                className={style.tagCloseIcon}
+                className={
+                  tag.type === "unknown" ? style.tagCloseIcon : style.tagCloseIconList
+                }
                 onClick={() => removeTags(index)}
               >
                 x
               </span>
-              <span className={style.tagTitle}>{tag}</span>
+              <span className={style.tagTitle}>{tag.keyword}</span>
             </li>
           ))}
         </ul>
@@ -97,39 +99,7 @@ const Tags: React.FC<TagsProps> = ({
           ref={ref}
         />
       </div>
-      {tagsSuggestions?.length && !getSkills?.length ? (
-        <div style={{zIndex:0}}>
-          {tagsSuggestions?.map((skill: any, index: any) => { 
-            return (
-              <button
-              key={index}
-                className={style.suggestionsButton}
-                onClick={() => addSkills(skill)}
-              >
-                {skill?.keyword}
-              </button>
-            );
-          })}
-        </div>
-      ) : null}
-
-      {getSkills?.length ? (
-        <div style={{ maxHeight: 200, overflow: 'scroll' }}>
-          {groupTitle?.length &&
-            getSkills?.map((skill: any, index: any) => {
-              return (
-                <div key={index} className={style.skillDropdown}>
-                  <button
-                    className={style.button}
-                    onClick={() => addSkills(skill)}
-                  >
-                    {skill?.keyword}
-                  </button>
-                </div>
-              );
-            })}
-        </div>
-      ) : null}
+    
     </>
   );
 };

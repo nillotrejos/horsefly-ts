@@ -43,7 +43,8 @@ export const getContries = async () => {
   }
 
   export const demand = async (location:any,filterBox:any,tagData:any,country:any,currency:any) => {
-    console.log(filterBox,'filterBox');
+    
+    console.log(JSON.stringify([location]),'location');
     const locationData = JSON.stringify([{"subContinent":"south asia","country":"in","region":"west bengal","city":"kolkata","locationId":"fa0daf330d0b1e41782eb05feca8b7d8","radius":"0"}])
     const filter = JSON.stringify(filterBox)
     const tag = JSON.stringify(  {"or":[{"include":1,"keywords":tagData}]})

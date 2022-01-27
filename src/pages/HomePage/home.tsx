@@ -15,8 +15,7 @@ import {
   MdOutlinePlaylistAdd,
   MdDonutLarge,
   MdDoNotDisturbOn,
-  MdTune,
-  MdKeyboardArrowDown
+  MdTune
 } from 'react-icons/md';
 import { VscDiscard } from 'react-icons/vsc';
 import { FilterBox } from '../../components/FilterBox/filterBox';
@@ -26,9 +25,9 @@ const HomePage = () => {
   const [inputList, setInputList] = React.useState([
     { country: '', location: '', radius: '' }
   ]);
+
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
   const [country, setcountry] = React.useState('uk');
-  const [location, setLocation] = React.useState('');
   const [radius, setradius] = React.useState('');
   const [tags, setTags] = React.useState<any>([]);
   const [currency, setCurrency] = React.useState('');
@@ -40,25 +39,30 @@ const HomePage = () => {
   const [getSkills, setgetSkills] = React.useState([]);
   const [filterBox, setFilterBox] = React.useState(false);
   const [filterBoxData, setfilterBoxData] = React.useState('');
-  const [selectLocationData, setSelectLocationData] = React.useState('');
+  const [selectLocationData, setSelectLocationData] = React.useState([{}]);
   const [allTagsData, setallTagsData] = React.useState([]);
   const [resultPageData, setresultPageData] = React.useState([]);
-  const [tagsSuggestions, settagsSuggestions] = React.useState<any>([]);
+  const [selectListTag, settagsSuggestions] = React.useState<any>([]);
+  const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
 
-  console.log(currency, 'currency');
+  console.log(allCountries, 'allCountriesinputList');
+
   const locationData = (cities: any) => {
-    setLocation(cities?.displayName);
-    setSelectLocationData(cities);
+    console.log(cities, 'sjkjjkjkj');
+    setSelectLocationData((prevData: any) => [...prevData, cities]);
     setFilterCities(null);
   };
+
   const getCountries = async () => {
     const response = await getContries();
     setAllCountries(response);
   };
-  const getCitiesData = async () => {
-    const response = await getCities(country, location);
+
+  const getCitiesData = async (location: any, i: number) => {
+    const response = await getCities(inputList[i]?.country, location);
     setFilterCities(response);
   };
+
   const getSkillsData = async () => {
     if (groupTitle?.length > 2) {
       const response = await getTags(groupTitle);
@@ -68,16 +72,16 @@ const HomePage = () => {
   };
 
   React.useEffect(() => {
-    getCitiesData();
-  }, [location.length]);
-
-  React.useEffect(() => {
     getSkillsData();
   }, [groupTitle]);
 
   React.useEffect(() => {
     getCountries();
   }, []);
+
+  const addSkills = (skill) => {
+    settagsSuggestions(skill);
+  };
 
   const exploreResult = async () => {
     setIsLoading(true);
@@ -88,7 +92,7 @@ const HomePage = () => {
       allData,
       country
     };
-    console.log(exploreData, 'exploreData');
+    // console.log(exploreData, 'exploreData');
     const res = await demand(
       selectLocationData,
       filterBoxData,
@@ -96,8 +100,7 @@ const HomePage = () => {
       country,
       currency
     );
-    setresultPageData(res)
-    console.log(res,"ressss===>>>>");
+    setresultPageData(res);
   };
 
   const handleRemoveClick = (index: number) => {
@@ -137,7 +140,10 @@ const HomePage = () => {
         {isLoading ? (
           <>
             <div style={{ width: '100%' }}>
-              <ResultPage setIsLoading={setIsLoading} resultPageData={resultPageData} />
+              <ResultPage
+                setIsLoading={setIsLoading}
+                resultPageData={resultPageData}
+              />
             </div>
           </>
         ) : (
@@ -179,8 +185,15 @@ const HomePage = () => {
                       <SelectDropDown
                         items={allCountries}
                         className={style.dropdown}
-                        handler={setcountry}
-                        title={country}
+                        handler={(e) =>
+                          setInputList((prev) => {
+                            console.log(e, 'eee countru');
+                            const newList: any = [...prev];
+                            newList[i].country = e;
+                            return newList;
+                          })
+                        }
+                        title={value.country}
                       />
                       <div
                         style={{
@@ -193,35 +206,30 @@ const HomePage = () => {
                           type="text"
                           placeholder="Location"
                           name="location"
-                          onChange={(e) => setLocation(e.target.value)}
+                          onChange={(e) =>
+                            setInputList((prev) => {
+                              const newList: any = [...prev];
+                              newList[i].location = e.target.value;
+                              getCitiesData(e.target.value, i);
+                              return newList;
+                            })
+                          }
                           className={style.dropdown1}
-                          value={location}
+                          value={value.location}
                         />
-                        <div className={style.filterCitiesContainer}>
-                          {filterCities?.length > 1 &&
-                            location.length > 1 &&
-                            filterCities?.map((cities, index) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className={style.skillDropdown}
-                                >
-                                  <button
-                                    className={style.locationButton}
-                                    onClick={() => locationData(cities)}
-                                  >
-                                    {cities?.displayName}
-                                  </button>
-                                </div>
-                              );
-                            })}
-                        </div>
                       </div>
 
                       <SelectDropDown
                         items={RADIUS}
                         className={style.dropdown2}
-                        handler={setradius}
+                        // handler={setradius}
+                        handler={(e) =>
+                          setInputList((prev) => {
+                            const newList: any = [...prev];
+                            newList[i].radius = e;
+                            return newList;
+                          })
+                        }
                         captionKey="radius"
                         title="Radius"
                         extra="mi"
@@ -249,6 +257,35 @@ const HomePage = () => {
                         </div>
                       )}
                       {inputList.length - 1 === i && (
+                        <div className={style.filterCitiesContainer}>
+                          {filterCities?.length > 1 &&
+                            filterCities?.map((cities, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className={style.skillDropdown}
+                                >
+                                  <button
+                                    className={style.locationButton}
+                                    onClick={() =>
+                                      setInputList((prev) => {
+                                        const newList: any = [...prev];
+                                        newList[i].location =
+                                          cities.displayName;
+                                        locationData(cities);
+                                        return newList;
+                                      })
+                                    }
+                                  >
+                                    {cities?.displayName}
+                                  </button>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      )}
+
+                      {inputList.length - 1 === i && (
                         <Button
                           onClick={handleAddClick}
                           title="Add location"
@@ -273,8 +310,9 @@ const HomePage = () => {
                         getSkills={getSkills}
                         setgetSkills={setgetSkills}
                         groupTitle={groupTitle}
-                        setallTagsData={setallTagsData}    
-                                            // settagsSuggestions={settagsSuggestions}
+                        setallTagsData={setallTagsData}
+                        selectListTag={selectListTag}
+                        settagsSuggestionList={settagsSuggestionList}
                       />
                       {searchGroups.length > 1 && (
                         <div
@@ -301,7 +339,38 @@ const HomePage = () => {
                     </div>
                   );
                 })}
-
+                {tagsSuggestionList?.length && !getSkills?.length ? (
+                  <div style={{ zIndex: 0 }}>
+                    {tagsSuggestionList?.map((skill: any, index: any) => {
+                      return (
+                        <button
+                          key={index}
+                          className={style.suggestionsButton}
+                          onClick={() => addSkills(skill)}
+                        >
+                          {skill?.keyword}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+                {getSkills?.length ? (
+                  <div style={{ maxHeight: 200, overflow: 'scroll' }}>
+                    {groupTitle?.length &&
+                      getSkills?.map((skill: any, index: any) => {
+                        return (
+                          <div key={index} className={style.skillDropdown}>
+                            <button
+                              className={style.button}
+                              onClick={() => addSkills(skill)}
+                            >
+                              {skill?.keyword}
+                            </button>
+                          </div>
+                        );
+                      })}
+                  </div>
+                ) : null}
                 <Button
                   title="Add search group"
                   disable={count.length < 1}

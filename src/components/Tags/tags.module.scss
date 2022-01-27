@@ -44,19 +44,7 @@
 .skillDropdown:hover {
   background-color: #f0f5f5;
 }
-.suggestionsButton{
-  margin: 8px 8px 0 0;
-  padding: 4px 8px;
-  border: 1px solid #ccc;
-  border-top: 1px solid #e6e6e6;
-  border-left: 1px solid #e6e6e6;
-  border-radius: 3px;
-  background-color: #f3f3f3;
-  color: #333;
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 22px;
-}
+
 .dropDownContainer {
   margin: 5px;
   padding: 5px;
@@ -103,7 +91,20 @@
     cursor: pointer;
     border-radius: 3px 0px 0px 3px;
     font-weight: 400;
-
+    justify-content: center;
+  }
+  .tagCloseIconList {
+    display: block;
+    width: 22px;
+    height: 100%;
+    line-height: 19px;
+    text-align: center;
+    font-size: 21px;
+    color: white;
+    background: #4584c4;
+    cursor: pointer;
+    border-radius: 3px 0px 0px 3px;
+    font-weight: 400;
     justify-content: center;
   }
 }
