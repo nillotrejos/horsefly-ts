@@ -70,7 +70,7 @@
 .currencyDropdown{
   width: 60px;
   background-color: transparent;
-  border: none;
+  border: none; 
   outline: none;
   color: #888;
 

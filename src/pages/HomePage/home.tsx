@@ -28,9 +28,9 @@ const HomePage = () => {
 
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
   const [country, setcountry] = React.useState('uk');
-  const [radius, setradius] = React.useState('');
+  const [radius, setradius] = React.useState('5');
   const [tags, setTags] = React.useState<any>([]);
-  const [currency, setCurrency] = React.useState('');
+  const [currency, setCurrency] = React.useState('US Dollar');
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
@@ -39,19 +39,39 @@ const HomePage = () => {
   const [getSkills, setgetSkills] = React.useState([]);
   const [filterBox, setFilterBox] = React.useState(false);
   const [filterBoxData, setfilterBoxData] = React.useState('');
-  const [selectLocationData, setSelectLocationData] = React.useState([{}]);
+  const [selectLocationData, setSelectLocationData] = React.useState<any>([]);
   const [allTagsData, setallTagsData] = React.useState([]);
   const [resultPageData, setresultPageData] = React.useState([]);
   const [selectListTag, settagsSuggestions] = React.useState<any>([]);
   const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
 
-  console.log(allCountries, 'allCountriesinputList');
+  console.log(tags, 'tagsinputList');
 
-  const locationData = (cities: any) => {
-    console.log(cities, 'sjkjjkjkj');
-    setSelectLocationData((prevData: any) => [...prevData, cities]);
+
+  const locationData = (cities: any,i:number) => {
+    console.log(i,'iiii');
+  const countryData :any =allCountries?.find((country) => country.code === inputList[i]?.country)
+
+  const subContinent = countryData.continent
+  const country = countryData.code
+  const region = cities.region || 'all'
+  const city = cities.city || 0
+  const locationId = cities.locationId || 0
+  const radius = inputList[i]?.radius || ""
+
+const data ={
+  subContinent,
+  country,
+  region,
+  city,
+  locationId,
+  radius
+}
+console.log(data,'dataa===>>>');
+
+    setSelectLocationData([...selectLocationData, data]);
     setFilterCities(null);
-  };
+  };  
 
   const getCountries = async () => {
     const response = await getContries();
@@ -92,7 +112,7 @@ const HomePage = () => {
       allData,
       country
     };
-    // console.log(exploreData, 'exploreData');
+
     const res = await demand(
       selectLocationData,
       filterBoxData,
@@ -131,7 +151,7 @@ const HomePage = () => {
     setTags((prevTags: any) => [...prevTags, tags]);
   };
   return (
-    <div className={style.top} style={{}}>
+    <div className={style.top} >
       <div className={style.topBar}>
         <Image src={Icon} width={160} height={26} />
       </div>
@@ -211,6 +231,7 @@ const HomePage = () => {
                               const newList: any = [...prev];
                               newList[i].location = e.target.value;
                               getCitiesData(e.target.value, i);
+                             
                               return newList;
                             })
                           }
@@ -272,7 +293,7 @@ const HomePage = () => {
                                         const newList: any = [...prev];
                                         newList[i].location =
                                           cities.displayName;
-                                        locationData(cities);
+                                        locationData(cities,i);
                                         return newList;
                                       })
                                     }
@@ -381,7 +402,7 @@ const HomePage = () => {
               </div>
 
               <div className={style.bottomMainContainer}>
-                {tags.length ? (
+                {tags.length > 1 ? (
                   <div className={style.bottom}>
                     <div className={style.bottomContainer}>
                       <Button
