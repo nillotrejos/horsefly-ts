@@ -19,6 +19,9 @@ import {
 } from 'react-icons/md';
 import { VscDiscard } from 'react-icons/vsc';
 import { FilterBox } from '../../components/FilterBox/filterBox';
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../../store/store';
+import { setCurrentUserLocation } from '../../features/homepageSlice';
 
 const HomePage = () => {
   const [allData, setallData] = React.useState([{}]);
@@ -44,8 +47,9 @@ const HomePage = () => {
   const [resultPageData, setresultPageData] = React.useState([]);
   const [selectListTag, settagsSuggestions] = React.useState<any>([]);
   const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
-
-  console.log(tags, 'tagsinputList');
+  const dispatch = useDispatch()
+  const userData = useSelector((state: RootState) => state.userData.value)
+  console.log(userData,"sssssssssss");
 
 
   const locationData = (cities: any,i:number) => {
@@ -68,7 +72,7 @@ const data ={
   radius
 }
 console.log(data,'dataa===>>>');
-
+dispatch(setCurrentUserLocation({ data}))
     setSelectLocationData([...selectLocationData, data]);
     setFilterCities(null);
   };  
@@ -344,7 +348,7 @@ console.log(data,'dataa===>>>');
                           }}
                         >
                           <p className={style.search}>Search Group Options</p>
-
+                         
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
