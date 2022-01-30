@@ -13,14 +13,12 @@ export const currentUserSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUserLocation: (state, action: PayloadAction<any>) => {
-        console.log(action,'action');
         state.value = ([...state.value, action.payload.data])
       },
   
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { setCurrentUserLocation} = currentUserSlice.actions
 
 export default currentUserSlice.reducer

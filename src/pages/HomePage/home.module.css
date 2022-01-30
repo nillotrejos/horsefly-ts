@@ -135,6 +135,11 @@
   background-color: #f6f6f6;
   height: 40px;
 }
+.switch1{
+  width: 12px !important;
+ margin-right: 120px;
+ height: 20px;
+}
 .inputsContainer{
   display: flex;
   flex-direction: column;

@@ -1,6 +1,7 @@
 import React from 'react';
 import style from './home.module.css';
 import Image from 'next/image';
+import Switch from 'react-switch';
 import Icon from '../../../public/assets/horsefly.png';
 import SelectDropDown from '../../components/Dropdown/dropdown';
 import { CURRENCY, RADIUS } from '../../components/utils/MOC_DATA/mocData';
@@ -19,7 +20,7 @@ import {
 } from 'react-icons/md';
 import { VscDiscard } from 'react-icons/vsc';
 import { FilterBox } from '../../components/FilterBox/filterBox';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { setCurrentUserLocation } from '../../features/homepageSlice';
 
@@ -47,35 +48,37 @@ const HomePage = () => {
   const [resultPageData, setresultPageData] = React.useState([]);
   const [selectListTag, settagsSuggestions] = React.useState<any>([]);
   const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
-  const dispatch = useDispatch()
-  const userData = useSelector((state: RootState) => state.userData.value)
-  console.log(userData,"sssssssssss");
+  const [isChecked, setIsChecked] = React.useState(false);
 
+  const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.userData.value);
+  console.log(userData, 'sssssssssss');
 
-  const locationData = (cities: any,i:number) => {
-    console.log(i,'iiii');
-  const countryData :any =allCountries?.find((country) => country.code === inputList[i]?.country)
+  const locationData = (cities: any, i: number) => {
+    const countryData: any = allCountries?.find(
+      (country) => country.code === inputList[i]?.country
+    );
 
-  const subContinent = countryData.continent
-  const country = countryData.code
-  const region = cities.region || 'all'
-  const city = cities.city || 0
-  const locationId = cities.locationId || 0
-  const radius = inputList[i]?.radius || ""
+    const subContinent = countryData.continent;
+    const country = countryData.code;
+    const region = cities.region || 'all';
+    const city = cities.city || 0;
+    const locationId = cities.locationId || 0;
+    const radius = inputList[i]?.radius || '';
 
-const data ={
-  subContinent,
-  country,
-  region,
-  city,
-  locationId,
-  radius
-}
-console.log(data,'dataa===>>>');
-dispatch(setCurrentUserLocation({ data}))
+    const data = {
+      subContinent,
+      country,
+      region,
+      city,
+      locationId,
+      radius
+    };
+    console.log(data, 'dataa===>>>');
+    dispatch(setCurrentUserLocation({ data }));
     setSelectLocationData([...selectLocationData, data]);
     setFilterCities(null);
-  };  
+  };
 
   const getCountries = async () => {
     const response = await getContries();
@@ -106,6 +109,9 @@ dispatch(setCurrentUserLocation({ data}))
   const addSkills = (skill) => {
     settagsSuggestions(skill);
   };
+  const switchHanler = () => {
+    setIsChecked(!isChecked);
+  };
 
   const exploreResult = async () => {
     setIsLoading(true);
@@ -135,6 +141,7 @@ dispatch(setCurrentUserLocation({ data}))
 
   const handleAddClick = () => {
     setInputList([...inputList, { country: '', location: '', radius: '' }]);
+
     const data = {
       country,
       selectLocationData,
@@ -155,7 +162,7 @@ dispatch(setCurrentUserLocation({ data}))
     setTags((prevTags: any) => [...prevTags, tags]);
   };
   return (
-    <div className={style.top} >
+    <div className={style.top}>
       <div className={style.topBar}>
         <Image src={Icon} width={160} height={26} />
       </div>
@@ -235,7 +242,7 @@ dispatch(setCurrentUserLocation({ data}))
                               const newList: any = [...prev];
                               newList[i].location = e.target.value;
                               getCitiesData(e.target.value, i);
-                             
+
                               return newList;
                             })
                           }
@@ -297,7 +304,7 @@ dispatch(setCurrentUserLocation({ data}))
                                         const newList: any = [...prev];
                                         newList[i].location =
                                           cities.displayName;
-                                        locationData(cities,i);
+                                        locationData(cities, i);
                                         return newList;
                                       })
                                     }
@@ -324,31 +331,32 @@ dispatch(setCurrentUserLocation({ data}))
               })}
               <div style={{ margin: 10 }}>
                 <p className={style.search}>Search Group Options</p>
-                {searchGroups.map((index) => {
+                {searchGroups.map((val,index) => {
+                  console.log(index === 0,'innnnn');
                   return (
                     <div key={index}>
-                      <Tags
-                        setgroupTitle={setgroupTitle}
-                        setcount={setcount}
-                        selectedTags={selectedTags}
-                        value={''}
-                        getSkills={getSkills}
-                        setgetSkills={setgetSkills}
-                        groupTitle={groupTitle}
-                        setallTagsData={setallTagsData}
-                        selectListTag={selectListTag}
-                        settagsSuggestionList={settagsSuggestionList}
-                      />
-                      {searchGroups.length > 1 && (
+                       {searchGroups.length > 1 &&  index !== 0 &&(
                         <div
                           className={style.searchInputSection}
                           style={{
                             display: 'flex',
-                            justifyContent: 'space-between'
+                            justifyContent: 'space-between',
+                            alignItems:"center"
                           }}
                         >
                           <p className={style.search}>Search Group Options</p>
-                         
+                          <Switch
+                            onChange={switchHanler}
+                            checked={isChecked}
+                            offColor="#4584c4"
+                            uncheckedIcon={false}
+                            checkedIcon={false}
+                            className={style.switch1}
+                            onColor	='#E85153'
+                            boxShadow="none"
+                            activeBoxShadow="none"
+                            height={20}
+                          />
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
@@ -361,6 +369,19 @@ dispatch(setCurrentUserLocation({ data}))
                           </div>
                         </div>
                       )}
+                      <Tags
+                        setgroupTitle={setgroupTitle}
+                        setcount={setcount}
+                        selectedTags={selectedTags}
+                        value={''}
+                        getSkills={getSkills}
+                        setgetSkills={setgetSkills}
+                        groupTitle={groupTitle}
+                        setallTagsData={setallTagsData}
+                        selectListTag={selectListTag}
+                        settagsSuggestionList={settagsSuggestionList}
+                      />
+                     
                     </div>
                   );
                 })}
