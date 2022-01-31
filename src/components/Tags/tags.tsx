@@ -33,15 +33,20 @@ const Tags: React.FC<TagsProps> = ({
     settagsSuggestionList(response);
   };
   React.useEffect(() => {
+    console.log("3");
+
     addSkills(selectListTag)
   }, [selectListTag]);
 
 
   React.useEffect(() => {
+    console.log("2");
+
     suggestionTagData();
   }, [allTags]);
 
   React.useEffect(() => {
+    console.log("1");
     setcount(tags);
     setallTagsData(allTags);
   }, [tags.length]);
@@ -77,7 +82,7 @@ const Tags: React.FC<TagsProps> = ({
     <>
       <div className={style.tagsInput}>
         <ul className={style.tagss}>
-          {allTags?.map((tag: string, index: number) => (
+          {allTags?.map((tag: any, index: number) => (
             <li key={index} className={style.tag}>
               <span
                 className={

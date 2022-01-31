@@ -4,6 +4,8 @@ import { FaChevronCircleLeft, FaClipboardList } from 'react-icons/fa';
 import { MdGroup, MdTrendingUp } from 'react-icons/md';
 import Switch from 'react-switch';
 import DetailCard from '../../components/DetailCard/detailCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 interface ResultPageProps {
   setIsLoading: any;
@@ -12,8 +14,9 @@ interface ResultPageProps {
 const ResultPage: React.FC<ResultPageProps> = ({ setIsLoading,resultPageData }) => {
   const [loading, setLoading] = React.useState(true);
   const [isChecked, setIsChecked] = React.useState(false);
+  const resultData = useSelector((state: RootState) => state.userData.resultData);
+  console.log(resultData,'resultData');
   const {totalCandidatesCount,totalAdvertsCount,totalAvgSalary,regions} = resultPageData
-console.log(resultPageData,"finalll")
   const switchHanler = () => {
     setIsChecked(!isChecked);
   };

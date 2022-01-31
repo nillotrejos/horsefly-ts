@@ -1,24 +1,28 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface userState {
-  value: any
+  location: any;
+  resultData: any;
 }
 
 const initialState: userState = {
-  value: [],
-}
+  location: [],
+  resultData: []
+};
 
 export const currentUserSlice = createSlice({
   name: 'currentUser',
   initialState,
   reducers: {
     setCurrentUserLocation: (state, action: PayloadAction<any>) => {
-        state.value = ([...state.value, action.payload.data])
-      },
-  
-  },
-})
+      state.location = [...state.location, action.payload.data];
+    },
+    resultData: (state, action: PayloadAction<any>) => {
+      state.resultData = [...state.resultData, action.payload.data];
+    }
+  }
+});
 
-export const { setCurrentUserLocation} = currentUserSlice.actions
+export const { setCurrentUserLocation, resultData } = currentUserSlice.actions;
 
-export default currentUserSlice.reducer
+export default currentUserSlice.reducer;

@@ -22,7 +22,7 @@ import { VscDiscard } from 'react-icons/vsc';
 import { FilterBox } from '../../components/FilterBox/filterBox';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
-import { setCurrentUserLocation } from '../../features/homepageSlice';
+import { setCurrentUserLocation,resultData } from '../../features/homepageSlice';
 
 const HomePage = () => {
   const [allData, setallData] = React.useState([{}]);
@@ -39,7 +39,7 @@ const HomePage = () => {
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
   const [allCountries, setAllCountries] = React.useState(['uk']);
-  const [filterCities, setFilterCities] = React.useState([]);
+  const [filterCities, setFilterCities] = React.useState<any>([]);
   const [getSkills, setgetSkills] = React.useState([]);
   const [filterBox, setFilterBox] = React.useState(false);
   const [filterBoxData, setfilterBoxData] = React.useState('');
@@ -51,12 +51,11 @@ const HomePage = () => {
   const [isChecked, setIsChecked] = React.useState(false);
 
   const dispatch = useDispatch();
-  const userData = useSelector((state: RootState) => state.userData.value);
-  console.log(userData, 'sssssssssss');
+  const userData = useSelector((state: RootState) => state.userData.location);
 
   const locationData = (cities: any, i: number) => {
     const countryData: any = allCountries?.find(
-      (country) => country.code === inputList[i]?.country
+      (country:any) => country.code === inputList[i]?.country
     );
 
     const subContinent = countryData.continent;
@@ -106,7 +105,7 @@ const HomePage = () => {
     getCountries();
   }, []);
 
-  const addSkills = (skill) => {
+  const addSkills = (skill: any) => {
     settagsSuggestions(skill);
   };
   const switchHanler = () => {
@@ -115,13 +114,6 @@ const HomePage = () => {
 
   const exploreResult = async () => {
     setIsLoading(true);
-    const exploreData = {
-      selectLocationData,
-      filterBoxData,
-      allTagsData,
-      allData,
-      country
-    };
 
     const res = await demand(
       selectLocationData,
@@ -131,6 +123,7 @@ const HomePage = () => {
       currency
     );
     setresultPageData(res);
+    dispatch(resultData({res}))
   };
 
   const handleRemoveClick = (index: number) => {
@@ -291,7 +284,7 @@ const HomePage = () => {
                       {inputList.length - 1 === i && (
                         <div className={style.filterCitiesContainer}>
                           {filterCities?.length > 1 &&
-                            filterCities?.map((cities, index) => {
+                            filterCities?.map((cities :any, index: number) => {
                               return (
                                 <div
                                   key={index}
@@ -332,7 +325,6 @@ const HomePage = () => {
               <div style={{ margin: 10 }}>
                 <p className={style.search}>Search Group Options</p>
                 {searchGroups.map((val,index) => {
-                  console.log(index === 0,'innnnn');
                   return (
                     <div key={index}>
                        {searchGroups.length > 1 &&  index !== 0 &&(
@@ -345,6 +337,8 @@ const HomePage = () => {
                           }}
                         >
                           <p className={style.search}>Search Group Options</p>
+                          <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginRight:50}}>
+                          <span style={{fontSize:13,margin:5}}>Include terms</span>
                           <Switch
                             onChange={switchHanler}
                             checked={isChecked}
@@ -357,6 +351,8 @@ const HomePage = () => {
                             activeBoxShadow="none"
                             height={20}
                           />
+                         <p style={{fontSize:13,}}>Exclude Exclude terms</p>
+                            </div>
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
@@ -369,6 +365,7 @@ const HomePage = () => {
                           </div>
                         </div>
                       )}
+
                       <Tags
                         setgroupTitle={setgroupTitle}
                         setcount={setcount}

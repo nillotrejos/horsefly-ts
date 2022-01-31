@@ -137,8 +137,9 @@
 }
 .switch1{
   width: 12px !important;
- margin-right: 120px;
- height: 20px;
+ height: 10%;
+ font-size: 10px;
+ 
 }
 .inputsContainer{
   display: flex;
