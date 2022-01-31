@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { suggestionTag } from '../../Api/api';
 import style from './tags.module.scss';
 
@@ -11,8 +11,9 @@ interface TagsProps {
   setgetSkills: any;
   groupTitle?: any;
   setallTagsData: any;
-  selectListTag:any
-  settagsSuggestionList:any
+  selectListTag: any;
+  settagsSuggestionList: any;
+  isChecked: boolean;
 }
 
 const Tags: React.FC<TagsProps> = ({
@@ -22,34 +23,36 @@ const Tags: React.FC<TagsProps> = ({
   setgetSkills,
   setallTagsData,
   selectListTag,
-  settagsSuggestionList
+  settagsSuggestionList,
+  isChecked
 }) => {
   const [tags, setTags] = React.useState<any>([]);
   const [allTags, setallTags] = React.useState<any>([]);
   const ref = useRef<any>();
+  console.log(selectListTag, 'selectListTag');
 
   const suggestionTagData = async () => {
     const response = await suggestionTag(allTags);
     settagsSuggestionList(response);
   };
-  React.useEffect(() => {
-    console.log("3");
 
-    addSkills(selectListTag)
+  React.useEffect(() => {
+    addSkills(selectListTag);
   }, [selectListTag]);
 
+  useMemo(() => suggestionTagData(), [allTags]);
 
-  React.useEffect(() => {
-    console.log("2");
-
-    suggestionTagData();
-  }, [allTags]);
-
-  React.useEffect(() => {
-    console.log("1");
-    setcount(tags);
+  useMemo(() => {
     setallTagsData(allTags);
+    setcount(tags);
   }, [tags.length]);
+  // React.useEffect(() => {
+  //   suggestionTagData();
+  // }, [allTags]);
+
+  // React.useEffect(() => {
+  //   setallTagsData(allTags);
+  // }, [tags.length]);
 
   const removeTags = (indexToRemove: number) => {
     setTags([
@@ -81,12 +84,17 @@ const Tags: React.FC<TagsProps> = ({
   return (
     <>
       <div className={style.tagsInput}>
-        <ul className={style.tagss}>
+        <ol className={style.tagss}>
           {allTags?.map((tag: any, index: number) => (
             <li key={index} className={style.tag}>
+              {console.log(allTags, 'allTags')}
               <span
                 className={
-                  tag.type === "unknown" ? style.tagCloseIcon : style.tagCloseIconList
+                  isChecked
+                    ? style.tagCloseIconList1
+                    : tag.type === 'unknown'
+                    ? style.tagCloseIcon
+                    : style.tagCloseIconList
                 }
                 onClick={() => removeTags(index)}
               >
@@ -95,7 +103,7 @@ const Tags: React.FC<TagsProps> = ({
               <span className={style.tagTitle}>{tag.keyword}</span>
             </li>
           ))}
-        </ul>
+        </ol>
         <input
           type="text"
           onKeyUp={(event) => (event.key === 'Enter' ? addTags(event) : null)}
@@ -104,7 +112,6 @@ const Tags: React.FC<TagsProps> = ({
           ref={ref}
         />
       </div>
-    
     </>
   );
 };

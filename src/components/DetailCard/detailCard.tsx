@@ -21,12 +21,12 @@ const DetailCard: React.FC<DetailCardProps> = ({ region }, index) => {
               <MdGroup className={style.cardIcon1} />
               <span className={style.cardSpan}>{candidatesCount}</span>
             </div>
-            <div>
-              <span className={style.trendingText}>17</span>
+            <div className={style.sourcing}>
+              <span className={style.trendingText}>0</span> 
               <MdTrendingUp className={style.trIcon1} />
               <span className={style.sourcingText}>£{avgSalary}</span>
               <MdTrendingUp className={style.trIcon2} />
-              <span className={style.trendingText1}>34</span>
+              <span className={style.trendingText1}>0</span>
             </div>
             <div className={style.cardSection}>
               <FaClipboardList className={style.cardIcon2} />

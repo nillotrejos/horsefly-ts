@@ -22,7 +22,10 @@ import { VscDiscard } from 'react-icons/vsc';
 import { FilterBox } from '../../components/FilterBox/filterBox';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
-import { setCurrentUserLocation,resultData } from '../../features/homepageSlice';
+import {
+  setCurrentUserLocation,
+  resultData
+} from '../../features/homepageSlice';
 
 const HomePage = () => {
   const [allData, setallData] = React.useState([{}]);
@@ -49,13 +52,12 @@ const HomePage = () => {
   const [selectListTag, settagsSuggestions] = React.useState<any>([]);
   const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
   const [isChecked, setIsChecked] = React.useState(false);
-
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.userData.location);
 
   const locationData = (cities: any, i: number) => {
     const countryData: any = allCountries?.find(
-      (country:any) => country.code === inputList[i]?.country
+      (country: any) => country.code === inputList[i]?.country
     );
 
     const subContinent = countryData.continent;
@@ -90,7 +92,7 @@ const HomePage = () => {
   };
 
   const getSkillsData = async () => {
-    if (groupTitle?.length > 2) {
+    if (groupTitle?.length > 1) {
       const response = await getTags(groupTitle);
       setgetSkills(response);
     }
@@ -123,7 +125,7 @@ const HomePage = () => {
       currency
     );
     setresultPageData(res);
-    dispatch(resultData({res}))
+    dispatch(resultData({ res }));
   };
 
   const handleRemoveClick = (index: number) => {
@@ -167,6 +169,10 @@ const HomePage = () => {
               <ResultPage
                 setIsLoading={setIsLoading}
                 resultPageData={resultPageData}
+                selectLocationData={selectLocationData}
+                setInputList={setInputList}
+                settagsSuggestions={settagsSuggestions}
+                setresultPageData={setresultPageData}
               />
             </div>
           </>
@@ -211,7 +217,6 @@ const HomePage = () => {
                         className={style.dropdown}
                         handler={(e) =>
                           setInputList((prev) => {
-                            console.log(e, 'eee countru');
                             const newList: any = [...prev];
                             newList[i].country = e;
                             return newList;
@@ -284,24 +289,21 @@ const HomePage = () => {
                       {inputList.length - 1 === i && (
                         <div className={style.filterCitiesContainer}>
                           {filterCities?.length > 1 &&
-                            filterCities?.map((cities :any, index: number) => {
+                            filterCities?.map((cities: any, index: number) => {
                               return (
                                 <div
                                   key={index}
                                   className={style.skillDropdown}
+                                  onClick={() =>
+                                    setInputList((prev) => {
+                                      const newList: any = [...prev];
+                                      newList[i].location = cities.displayName;
+                                      locationData(cities, i);
+                                      return newList;
+                                    })
+                                  }
                                 >
-                                  <button
-                                    className={style.locationButton}
-                                    onClick={() =>
-                                      setInputList((prev) => {
-                                        const newList: any = [...prev];
-                                        newList[i].location =
-                                          cities.displayName;
-                                        locationData(cities, i);
-                                        return newList;
-                                      })
-                                    }
-                                  >
+                                  <button className={style.locationButton}>
                                     {cities?.displayName}
                                   </button>
                                 </div>
@@ -324,35 +326,46 @@ const HomePage = () => {
               })}
               <div style={{ margin: 10 }}>
                 <p className={style.search}>Search Group Options</p>
-                {searchGroups.map((val,index) => {
+                {searchGroups.map((val, index) => {
                   return (
                     <div key={index}>
-                       {searchGroups.length > 1 &&  index !== 0 &&(
+                      {searchGroups.length > 1 && index !== 0 && (
                         <div
                           className={style.searchInputSection}
                           style={{
                             display: 'flex',
                             justifyContent: 'space-between',
-                            alignItems:"center"
+                            alignItems: 'center'
                           }}
                         >
                           <p className={style.search}>Search Group Options</p>
-                          <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginRight:50}}>
-                          <span style={{fontSize:13,margin:5}}>Include terms</span>
-                          <Switch
-                            onChange={switchHanler}
-                            checked={isChecked}
-                            offColor="#4584c4"
-                            uncheckedIcon={false}
-                            checkedIcon={false}
-                            className={style.switch1}
-                            onColor	='#E85153'
-                            boxShadow="none"
-                            activeBoxShadow="none"
-                            height={20}
-                          />
-                         <p style={{fontSize:13,}}>Exclude Exclude terms</p>
-                            </div>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              marginRight: 50
+                            }}
+                          >
+                            <span style={{ fontSize: 13, margin: 5 }}>
+                              Include terms
+                            </span>
+                            <Switch
+                              onChange={switchHanler}
+                              checked={isChecked}
+                              offColor="#4584c4"
+                              uncheckedIcon={false}
+                              checkedIcon={false}
+                              className={style.switch1}
+                              onColor="#E85153"
+                              boxShadow="none"
+                              activeBoxShadow="none"
+                              height={20}
+                            />
+                            <p style={{ fontSize: 13 }}>
+                              Exclude Exclude terms
+                            </p>
+                          </div>
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
@@ -377,8 +390,8 @@ const HomePage = () => {
                         setallTagsData={setallTagsData}
                         selectListTag={selectListTag}
                         settagsSuggestionList={settagsSuggestionList}
+                        isChecked={isChecked}
                       />
-                     
                     </div>
                   );
                 })}
@@ -402,11 +415,12 @@ const HomePage = () => {
                     {groupTitle?.length &&
                       getSkills?.map((skill: any, index: any) => {
                         return (
-                          <div key={index} className={style.skillDropdown}>
-                            <button
-                              className={style.button}
-                              onClick={() => addSkills(skill)}
-                            >
+                          <div
+                            key={index}
+                            className={style.skillDropdown}
+                            onClick={() => addSkills(skill)}
+                          >
+                            <button className={style.button}>
                               {skill?.keyword}
                             </button>
                           </div>
@@ -424,7 +438,7 @@ const HomePage = () => {
               </div>
 
               <div className={style.bottomMainContainer}>
-                {tags.length > 1 ? (
+                {count.length  ? (
                   <div className={style.bottom}>
                     <div className={style.bottomContainer}>
                       <Button

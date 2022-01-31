@@ -44,7 +44,7 @@ export const getContries = async () => {
 
   export const demand = async (location:any,filterBox:any,tagData:any,country:any,currency:any) => {
 
-   const locationData = JSON.stringify([location])
+   const locationData = JSON.stringify(location)
     const filter = JSON.stringify(filterBox || {"male":1,"female":1,"yoe0":1,"yoe1":1,"yoe2":1})
     const tag = JSON.stringify(  {"or":[{"include":1,"keywords":tagData}]})
     const url = `${endpoint}list/search/demand`;

@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   padding: 10px;
+  justify-content: space-between;
 }
 .topSectionContainer {
   flex-grow: 1;
@@ -15,13 +16,14 @@
   padding: 10px;
 }
 .topSectionText {
-  flex-grow: 2;
+  flex-grow: 3;
   padding: 10px;
+  margin-right: 100px;
 }
 .TopHeading1 {
   font-size: 12px;
   color: gray;
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 .TopHeading2 {
   font-size: 20px;
@@ -32,6 +34,7 @@
   flex-direction: column;
   justify-content: center;
   margin-left: 60px;
+  text-align: center;
 }
 .span1 {
   color: #3170a3;
@@ -182,4 +185,9 @@
     justify-content: center;
     width: 40%;
     margin-left: 90px
+}
+.regionMessage{
+  text-align: center;
+  width: 70%;
+  margin: auto;
 }

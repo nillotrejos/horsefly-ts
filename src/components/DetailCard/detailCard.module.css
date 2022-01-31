@@ -24,13 +24,7 @@
   color: gray;
   margin: 10px;
 }
-.trendingText1 {
-  font-size: 12px;
-  margin: 3px;
-  color: black;
-  font-weight: 500;
-  margin-bottom: 20px;
-}
+
 .trIcon1 {
   color: #4c9059;
   margin: 5px;
@@ -53,4 +47,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.trendingText {
+  font-size: 12px;
+  margin: 3px;
+  color: black;
+  font-weight: 500;
+  margin-top: 20px;
+}
+.trendingText1 {
+  font-size: 12px;
+  margin: 3px;
+  color: black;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.sourcingText {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4c9059;
+}
+.sourcing {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 10px;
 }
