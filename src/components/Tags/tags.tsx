@@ -29,7 +29,6 @@ const Tags: React.FC<TagsProps> = ({
   const [tags, setTags] = React.useState<any>([]);
   const [allTags, setallTags] = React.useState<any>([]);
   const ref = useRef<any>();
-  console.log(selectListTag, 'selectListTag');
 
   const suggestionTagData = async () => {
     const response = await suggestionTag(allTags);
@@ -87,7 +86,6 @@ const Tags: React.FC<TagsProps> = ({
         <ol className={style.tagss}>
           {allTags?.map((tag: any, index: number) => (
             <li key={index} className={style.tag}>
-              {console.log(allTags, 'allTags')}
               <span
                 className={
                   isChecked

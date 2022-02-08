@@ -34,14 +34,14 @@ const HomePage = () => {
   ]);
 
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
-  const [country, setcountry] = React.useState('uk');
+  const [country, setcountry] = React.useState('');
   const [radius, setradius] = React.useState('5');
   const [tags, setTags] = React.useState<any>([]);
   const [currency, setCurrency] = React.useState('US Dollar');
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
   const [groupTitle, setgroupTitle] = React.useState([]);
-  const [allCountries, setAllCountries] = React.useState(['uk']);
+  const [allCountries, setAllCountries] = React.useState([]);
   const [filterCities, setFilterCities] = React.useState<any>([]);
   const [getSkills, setgetSkills] = React.useState([]);
   const [filterBox, setFilterBox] = React.useState(false);
@@ -52,6 +52,7 @@ const HomePage = () => {
   const [selectListTag, settagsSuggestions] = React.useState<any>([]);
   const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
   const [isChecked, setIsChecked] = React.useState(false);
+  const [cityFound, setCityFound] = React.useState(false);
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.userData.location);
 
@@ -75,20 +76,33 @@ const HomePage = () => {
       locationId,
       radius
     };
-    console.log(data, 'dataa===>>>');
     dispatch(setCurrentUserLocation({ data }));
     setSelectLocationData([...selectLocationData, data]);
-    setFilterCities(null);
+    // setFilterCities(null);
   };
 
   const getCountries = async () => {
-    const response = await getContries();
-    setAllCountries(response);
+    try {
+      const response = await getContries();
+      setAllCountries(response);
+      // console.log('response -->',response[0].code)
+      setInputList([
+        { country: response[0].code, location: '', radius: '' }
+      ])
+    } catch (e) {
+      console.log(e, "message")
+    }
   };
 
   const getCitiesData = async (location: any, i: number) => {
     const response = await getCities(inputList[i]?.country, location);
     setFilterCities(response);
+    response.map(city => {
+      let cityName = new RegExp(city.displayName, 'g')
+      let city2 = inputList[i]?.location.match(cityName)
+      if (city2) setCityFound(true)
+      else setCityFound(false)
+    })
   };
 
   const getSkillsData = async () => {
@@ -156,6 +170,26 @@ const HomePage = () => {
   const selectedTags = (tags: any) => {
     setTags((prevTags: any) => [...prevTags, tags]);
   };
+
+  if (typeof window === 'object') {
+    let doc = document.querySelector('body')
+    let container = document.querySelector('#filterBox')
+    let citiesInput = document.querySelector('#citiesInput')
+    let citiesContainer = document.querySelector('.filterCitiesContainer')
+    doc?.addEventListener('click', (e) => {
+      if (e.target !== container) {
+        setFilterBox(false)
+      }
+
+      let display = style.displayNone
+      if (e.target === citiesInput) {
+        citiesContainer?.classList.remove(display)
+      } else {
+        citiesContainer?.classList.add(display)
+      }
+    })
+  }
+
   return (
     <div className={style.top}>
       <div className={style.topBar}>
@@ -191,7 +225,7 @@ const HomePage = () => {
                 <div className={style.filterTextContainer}>
                   <div className={style.filterText}>
                     <MdTune />
-                    <button onClick={() => setFilterBox(!filterBox)}>
+                    <button id="filterBox" onClick={() => setFilterBox(!filterBox)}>
                       Filters
                     </button>
                   </div>
@@ -206,7 +240,8 @@ const HomePage = () => {
                 </div>
               </div>
               {filterBox ? (
-                <FilterBox setfilterBoxData={setfilterBoxData} />
+                <FilterBox
+                  setfilterBoxData={setfilterBoxData} />
               ) : null}
               {inputList?.map((value, i) => {
                 return (
@@ -215,12 +250,12 @@ const HomePage = () => {
                       <SelectDropDown
                         items={allCountries}
                         className={style.dropdown}
-                        handler={(e) =>
-                          setInputList((prev) => {
-                            const newList: any = [...prev];
-                            newList[i].country = e;
-                            return newList;
-                          })
+                        handler={(e) => {
+                          setInputList([
+                            { country: e, location: '', radius: '' }
+                          ])
+                          getCitiesData(e)
+                        }
                         }
                         title={value.country}
                       />
@@ -228,7 +263,7 @@ const HomePage = () => {
                         style={{
                           display: 'flex',
                           flexDirection: 'column',
-                          position: 'relative'
+                          position: 'relative',
                         }}
                       >
                         <InputField
@@ -240,16 +275,17 @@ const HomePage = () => {
                               const newList: any = [...prev];
                               newList[i].location = e.target.value;
                               getCitiesData(e.target.value, i);
-
                               return newList;
                             })
                           }
-                          className={style.dropdown1}
+                          className={`${style.dropdown1}`}
                           value={value.location}
                         />
                       </div>
 
+
                       <SelectDropDown
+                        disable={cityFound ? false : true}
                         items={RADIUS}
                         className={style.dropdown2}
                         // handler={setradius}
@@ -271,7 +307,7 @@ const HomePage = () => {
                           className={style.discardBtnContainer}
                           style={{
                             display: 'flex',
-                            justifyContent: 'flex-end'
+                            justifyContent: 'flex-end',
                           }}
                         >
                           <div
@@ -287,8 +323,9 @@ const HomePage = () => {
                         </div>
                       )}
                       {inputList.length - 1 === i && (
-                        <div className={style.filterCitiesContainer}>
-                          {filterCities?.length > 1 &&
+                        <div className={`${style.filterCitiesContainer} filterCitiesContainer`}
+                        >
+                          {filterCities?.length > 0 &&
                             filterCities?.map((cities: any, index: number) => {
                               return (
                                 <div
@@ -299,9 +336,15 @@ const HomePage = () => {
                                       const newList: any = [...prev];
                                       newList[i].location = cities.displayName;
                                       locationData(cities, i);
+                                      filterCities.map(city => {
+                                        let cityName = new RegExp(city.displayName, 'g')
+                                        let city2 = inputList[i]?.location.match(cityName)
+                                        if (city2) setCityFound(true)
+                                      })
                                       return newList;
                                     })
                                   }
+
                                 >
                                   <button className={style.locationButton}>
                                     {cities?.displayName}
@@ -438,7 +481,7 @@ const HomePage = () => {
               </div>
 
               <div className={style.bottomMainContainer}>
-                {count.length  ? (
+                {count.length ? (
                   <div className={style.bottom}>
                     <div className={style.bottomContainer}>
                       <Button

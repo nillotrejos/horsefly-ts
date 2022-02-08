@@ -6,7 +6,7 @@ interface InputFieldProps {
   type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: any;
-  value:any
+  value: any
 }
 
 const InputField = ({
@@ -20,6 +20,7 @@ const InputField = ({
   return (
     <div className="form-group">
       <input
+        id='citiesInput'
         type={type}
         name={name}
         className={className}
@@ -27,7 +28,7 @@ const InputField = ({
         onChange={onChange}
         value={value}
         autoComplete='off'
-      
+
       />
     </div>
   );

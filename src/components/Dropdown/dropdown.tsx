@@ -5,14 +5,14 @@ interface ItemProps {
 }
 
 interface SelectDropDownProps {
-  captionKey?: any ;
+  captionKey?: any;
   className?: string;
   items?: any;
   handler: (value: string) => void;
   disable?: boolean;
   selected?: string;
-  title?:string
-  extra?:string
+  title?: string
+  extra?: string
 }
 
 const SelectDropDown = ({
@@ -22,16 +22,17 @@ const SelectDropDown = ({
   disable,
   extra
 }: SelectDropDownProps) => {
+
   return (
     <select
       className={className}
       disabled={disable}
       onChange={(e) => handler(e.target.value)}
     >
-     
-      {items?.map((item: ItemProps,index:number) => (
-        <option  key={index} value={item?.code}>
-          {item?.name } {extra? extra:null}
+
+      {items?.map((item: ItemProps, index: number) => (
+        <option key={index} value={item?.code}>
+          {item?.name} {extra ? extra : null}
         </option>
       ))}
     </select>
