@@ -106,7 +106,7 @@ const HomePage = () => {
   };
 
   const getSkillsData = async () => {
-    if (groupTitle?.length > 1) {
+    if (groupTitle?.length > 0) {
       const response = await getTags(groupTitle);
       setgetSkills(response);
     }
@@ -374,7 +374,7 @@ const HomePage = () => {
                     <div key={index}>
                       {searchGroups.length > 1 && index !== 0 && (
                         <div
-                          className={style.searchInputSection}
+                        className={style.searchInputSection}
                           style={{
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -404,7 +404,7 @@ const HomePage = () => {
                               boxShadow="none"
                               activeBoxShadow="none"
                               height={20}
-                            />
+                              />
                             <p style={{ fontSize: 13 }}>
                               Exclude Exclude terms
                             </p>
@@ -412,12 +412,12 @@ const HomePage = () => {
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
-                          >
+                            >
                             <MdDoNotDisturbOn />
                             <Button
                               className={style.discardInputBtn}
                               title="Discard"
-                            />
+                              />
                           </div>
                         </div>
                       )}
@@ -432,9 +432,10 @@ const HomePage = () => {
                         groupTitle={groupTitle}
                         setallTagsData={setallTagsData}
                         selectListTag={selectListTag}
+                        tagsSuggestionList={tagsSuggestionList}
                         settagsSuggestionList={settagsSuggestionList}
                         isChecked={isChecked}
-                      />
+                        />
                     </div>
                   );
                 })}
