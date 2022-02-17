@@ -28,65 +28,84 @@ import {
 } from '../../features/homepageSlice';
 
 const HomePage = () => {
-  const [allData, setallData] = React.useState([{}]);
-  const [inputList, setInputList] = React.useState([
+  const [completeLocationData, setCompleteLocationData] = React.useState([
     { country: '', location: '', radius: '' }
   ]);
+  const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]); //search group in which tags will be added separately
 
-  const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
-  const [country, setcountry] = React.useState('');
-  const [radius, setradius] = React.useState('5');
-  const [tags, setTags] = React.useState<any>([]);
-  const [currency, setCurrency] = React.useState('US Dollar');
+  const [country, setcountry] = React.useState(''); ///don't know what is this
+  const [currency, setCurrency] = React.useState('US Dollar'); //currency is set here
   const [isLoading, setIsLoading] = React.useState(false);
-  const [count, setcount] = React.useState([]);
-  const [groupTitle, setgroupTitle] = React.useState([]);
-  const [allCountries, setAllCountries] = React.useState([]);
-  const [filterCities, setFilterCities] = React.useState<any>([]);
-  const [getSkills, setgetSkills] = React.useState([]);
-  const [filterBox, setFilterBox] = React.useState(false);
-  const [filterBoxData, setfilterBoxData] = React.useState('');
-  const [selectLocationData, setSelectLocationData] = React.useState<any>([]);
-  const [allTagsData, setallTagsData] = React.useState([]);
-  const [resultPageData, setresultPageData] = React.useState([]);
-  const [selectListTag, settagsSuggestions] = React.useState<any>([]);
-  const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]);
+  
+  const [allTags, setAllTags] = React.useState<any>([]);
+  const [groupTitle, setgroupTitle] = React.useState([]); //tag inputValue will be added here
+
+  const [countriesList, setCountriesList] = React.useState([]); //for countires dropdown
+  const [filterCities, setFilterCities] = React.useState<any>([]); //for cities suggestion dropdown
+
+  const [getSkills, setgetSkills] = React.useState([]); //skill suggestion dropdown
+  
+  const [filterBox, setFilterBox] = React.useState(false); //filter box is open or not
+  const [filterBoxData, setfilterBoxData] = React.useState(''); //filter box data
+  const [selectLocationData, setSelectLocationData] = React.useState<any>([]); //to store selected location data
+  
+  const [allTagsData, setallTagsData] = React.useState([]); //to store selected tags data
+  const [resultPageData, setresultPageData] = React.useState([]); //don't know what is this
+  const [selectListTag, settagsSuggestions] = React.useState<any>([]); //last selected tag is stored here
+  const [tagsSuggestionList, settagsSuggestionList] = React.useState<any>([]); //suggestion tags are stored here after selecting tags
   const [isChecked, setIsChecked] = React.useState(false);
-  const [cityFound, setCityFound] = React.useState(false);
+  const [cityFound, setCityFound] = React.useState(false); //it will true when city location is selected
   const dispatch = useDispatch();
-  const userData = useSelector((state: RootState) => state.userData.location);
-
+  const userData = useSelector((state: RootState) => state.userData.location); //userLocation
+  
+  
+  
+  const locationGroupHandler = async (e: any, index: number) => {
+    let location = {country: e, location: '', radius: ''};
+    console.log(completeLocationData[index]);
+    console.log(location);
+    console.log(index);
+    // setCompleteLocationData([
+    //   { country: e, location: '', radius: '' }
+    // ])
+    // getCitiesData(e)
+  }
+  
   const locationData = (cities: any, i: number) => {
-    const countryData: any = allCountries?.find(
-      (country: any) => country.code === inputList[i]?.country
-    );
-
-    const subContinent = countryData.continent;
-    const country = countryData.code;
-    const region = cities.region || 'all';
-    const city = cities.city || 0;
-    const locationId = cities.locationId || 0;
-    const radius = inputList[i]?.radius || '';
-
-    const data = {
-      subContinent,
-      country,
-      region,
-      city,
-      locationId,
-      radius
-    };
+    //use to select city location  
+    const countryData: any = countriesList?.find(
+      (country: any) => country.code === completeLocationData[i]?.country
+      );
+      
+      const subContinent = countryData.continent;
+      const country = countryData.code;
+      const region = cities.region || 'all';
+      const city = cities.city || 0;
+      const locationId = cities.locationId || 0;
+      const radius = completeLocationData[i]?.radius || '';
+      
+      const data = {
+        subContinent,
+        country,
+        region,
+        city,
+        locationId,
+        radius
+      };
+      
+      //why sending data as object of object //need to check
+      setSelectLocationData([...selectLocationData, data]);
     dispatch(setCurrentUserLocation({ data }));
-    setSelectLocationData([...selectLocationData, data]);
+
+    //set selected location data
     // setFilterCities(null);
   };
 
   const getCountries = async () => {
     try {
       const response = await getContries();
-      setAllCountries(response);
-      // console.log('response -->',response[0].code)
-      setInputList([
+      setCountriesList(response);
+      setCompleteLocationData([
         { country: response[0].code, location: '', radius: '' }
       ])
     } catch (e) {
@@ -95,11 +114,11 @@ const HomePage = () => {
   };
 
   const getCitiesData = async (location: any, i: number) => {
-    const response = await getCities(inputList[i]?.country, location);
+    const response = await getCities(completeLocationData[i]?.country, location);
     setFilterCities(response);
     response.map(city => {
       let cityName = new RegExp(city.displayName, 'g')
-      let city2 = inputList[i]?.location.match(cityName)
+      let city2 = completeLocationData[i]?.location.match(cityName)
       if (city2) setCityFound(true)
       else setCityFound(false)
     })
@@ -143,20 +162,14 @@ const HomePage = () => {
   };
 
   const handleRemoveClick = (index: number) => {
-    const list = [...inputList];
+    const list = [...completeLocationData];
     list.splice(index, 1);
-    setInputList(list);
+    setCompleteLocationData(list);
   };
 
+  //using to add locations groups
   const handleAddClick = () => {
-    setInputList([...inputList, { country: '', location: '', radius: '' }]);
-
-    const data = {
-      country,
-      selectLocationData,
-      radius
-    };
-    setallData((prevData) => [...prevData, data]);
+    setCompleteLocationData([...completeLocationData, { country: countriesList[0]?.code, location: '', radius: '' }]);
   };
 
   const searchGroupHandler = () => {
@@ -166,9 +179,6 @@ const HomePage = () => {
     const list = [...searchGroups];
     list.splice(index, 1);
     setSearchGroups(list);
-  };
-  const selectedTags = (tags: any) => {
-    setTags((prevTags: any) => [...prevTags, tags]);
   };
 
   if (typeof window === 'object') {
@@ -204,7 +214,7 @@ const HomePage = () => {
                 setIsLoading={setIsLoading}
                 resultPageData={resultPageData}
                 selectLocationData={selectLocationData}
-                setInputList={setInputList}
+                setCompleteLocationData={setCompleteLocationData}
                 settagsSuggestions={settagsSuggestions}
                 setresultPageData={setresultPageData}
               />
@@ -243,18 +253,15 @@ const HomePage = () => {
                 <FilterBox
                   setfilterBoxData={setfilterBoxData} />
               ) : null}
-              {inputList?.map((value, i) => {
+              {completeLocationData?.map((value, i) => {
                 return (
                   <>
                     <div key={i} className={style.selectInputContainer}>
                       <SelectDropDown
-                        items={allCountries}
+                        items={countriesList}
                         className={style.dropdown}
                         handler={(e) => {
-                          setInputList([
-                            { country: e, location: '', radius: '' }
-                          ])
-                          getCitiesData(e)
+                          locationGroupHandler(e, i);
                         }
                         }
                         title={value.country}
@@ -271,7 +278,7 @@ const HomePage = () => {
                           placeholder="Location"
                           name="location"
                           onChange={(e) =>
-                            setInputList((prev) => {
+                            setCompleteLocationData((prev) => {
                               const newList: any = [...prev];
                               newList[i].location = e.target.value;
                               getCitiesData(e.target.value, i);
@@ -290,7 +297,7 @@ const HomePage = () => {
                         className={style.dropdown2}
                         // handler={setradius}
                         handler={(e) =>
-                          setInputList((prev) => {
+                          setCompleteLocationData((prev) => {
                             const newList: any = [...prev];
                             newList[i].radius = e;
                             return newList;
@@ -302,7 +309,7 @@ const HomePage = () => {
                       />
                     </div>
                     <div className="btn-box">
-                      {inputList.length !== 1 && (
+                      {completeLocationData.length !== 1 && (
                         <div
                           className={style.discardBtnContainer}
                           style={{
@@ -322,7 +329,7 @@ const HomePage = () => {
                           </div>
                         </div>
                       )}
-                      {inputList.length - 1 === i && (
+                      {completeLocationData.length - 1 === i && (
                         <div className={`${style.filterCitiesContainer} filterCitiesContainer`}
                         >
                           {filterCities?.length > 0 &&
@@ -332,13 +339,13 @@ const HomePage = () => {
                                   key={index}
                                   className={style.skillDropdown}
                                   onClick={() =>
-                                    setInputList((prev) => {
+                                    setCompleteLocationData((prev) => {
                                       const newList: any = [...prev];
                                       newList[i].location = cities.displayName;
                                       locationData(cities, i);
                                       filterCities.map(city => {
                                         let cityName = new RegExp(city.displayName, 'g')
-                                        let city2 = inputList[i]?.location.match(cityName)
+                                        let city2 = completeLocationData[i]?.location.match(cityName)
                                         if (city2) setCityFound(true)
                                       })
                                       return newList;
@@ -355,7 +362,7 @@ const HomePage = () => {
                         </div>
                       )}
 
-                      {inputList.length - 1 === i && (
+                      {completeLocationData.length - 1 === i && (
                         <Button
                           onClick={handleAddClick}
                           title="Add location"
@@ -374,7 +381,7 @@ const HomePage = () => {
                     <div key={index}>
                       {searchGroups.length > 1 && index !== 0 && (
                         <div
-                        className={style.searchInputSection}
+                          className={style.searchInputSection}
                           style={{
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -404,7 +411,7 @@ const HomePage = () => {
                               boxShadow="none"
                               activeBoxShadow="none"
                               height={20}
-                              />
+                            />
                             <p style={{ fontSize: 13 }}>
                               Exclude Exclude terms
                             </p>
@@ -412,30 +419,29 @@ const HomePage = () => {
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
-                            >
+                          >
                             <MdDoNotDisturbOn />
                             <Button
                               className={style.discardInputBtn}
                               title="Discard"
-                              />
+                            />
                           </div>
                         </div>
                       )}
 
                       <Tags
                         setgroupTitle={setgroupTitle}
-                        setcount={setcount}
-                        selectedTags={selectedTags}
                         value={''}
                         getSkills={getSkills}
                         setgetSkills={setgetSkills}
                         groupTitle={groupTitle}
                         setallTagsData={setallTagsData}
                         selectListTag={selectListTag}
-                        tagsSuggestionList={tagsSuggestionList}
                         settagsSuggestionList={settagsSuggestionList}
                         isChecked={isChecked}
-                        />
+                        allTags={allTags}
+                        setAllTags={setAllTags}
+                      />
                     </div>
                   );
                 })}
@@ -454,35 +460,39 @@ const HomePage = () => {
                     })}
                   </div>
                 ) : null}
-                {getSkills?.length ? (
-                  <div style={{ maxHeight: 200, overflow: 'scroll' }}>
-                    {groupTitle?.length &&
-                      getSkills?.map((skill: any, index: any) => {
-                        return (
-                          <div
-                            key={index}
-                            className={style.skillDropdown}
-                            onClick={() => addSkills(skill)}
-                          >
-                            <button className={style.button}>
-                              {skill?.keyword}
-                            </button>
-                          </div>
-                        );
-                      })}
-                  </div>
-                ) : null}
+
+                <div style={{ maxHeight: 200, overflow: 'scroll' }}>
+                  {groupTitle && <div
+                   onClick={()=>{addSkills(groupTitle)}}
+                  className={style.skillDropdown}>
+                    <button className={style.button}>Add {groupTitle}</button>
+                  </div>}
+                  {groupTitle?.length &&
+                    getSkills?.map((skill: any, index: any) => {
+                      return (
+                        <div
+                          key={index}
+                          className={style.skillDropdown}
+                          onClick={() => addSkills(skill)}
+                        >
+                          <button className={style.button}>
+                            {skill?.keyword}
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
                 <Button
                   title="Add search group"
-                  disable={count.length < 1}
-                  className={count.length ? style.btn1Active : style.btn1}
+                  disable={allTags.length < 1}
+                  className={allTags.length ? style.btn1Active : style.btn1}
                   icon={<MdOutlinePlaylistAdd className={style.iconStyle} />}
                   onClick={searchGroupHandler}
                 />
               </div>
 
               <div className={style.bottomMainContainer}>
-                {count.length ? (
+                {allTags.length ? (
                   <div className={style.bottom}>
                     <div className={style.bottomContainer}>
                       <Button

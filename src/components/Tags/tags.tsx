@@ -3,8 +3,6 @@ import { suggestionTag } from '../../Api/api';
 import style from './tags.module.scss';
 
 interface TagsProps {
-  setcount: any;
-  selectedTags: any;
   setgroupTitle: any;
   value: string;
   getSkills?: any;
@@ -13,13 +11,12 @@ interface TagsProps {
   setallTagsData: any;
   selectListTag: any;
   settagsSuggestionList: any;
-  tagsSuggestionList: any;
   isChecked: boolean;
+  allTags: any;
+  setAllTags: any;
 }
 
 const Tags: React.FC<TagsProps> = ({
-  selectedTags,
-  setcount,
   setgroupTitle,
   setgetSkills,
   setallTagsData,
@@ -27,10 +24,10 @@ const Tags: React.FC<TagsProps> = ({
   settagsSuggestionList,
   isChecked,
   getSkills,
-  tagsSuggestionList,
+  allTags,
+  setAllTags,
 }) => {
-  const [tags, setTags] = React.useState<any>([]);
-  const [allTags, setallTags] = React.useState<any>([]);
+  
   const ref = useRef<any>();
 
   const suggestionTagData = async () => {
@@ -44,47 +41,41 @@ const Tags: React.FC<TagsProps> = ({
       firstUpdate.current = false;
       return;
     }
-    console.log('worked')
     addSkills(selectListTag)
   }, [selectListTag]);
   
   useMemo(() => suggestionTagData(), [allTags]);
 
   React.useEffect(() => {
+    console.log("allTags", allTags);
     allTags.length > 0 && suggestionTagData();
   }, [allTags]);
 
   React.useEffect(() => {
     if (allTags.length > 0){
       setallTagsData(allTags);
-      setcount(tags);
     }
-  }, [tags]);
+  }, []);
   
   const removeTags = (indexToRemove: number) => {
-    setTags([
-      ...tags.filter((_: any, index: number) => index !== indexToRemove)
-    ]);
-    setallTags([
+    setAllTags([
       ...allTags.filter((_: any, index: number) => index !== indexToRemove)
     ]);
   };
   const addTags = (event: any) => {
     getSkills.map((item: any) => {
-      if (event.target.value === item.keyword){
-        const tag = { keyword: event.target.value, type: item.type, collisionId: item.collisionId };
-        setTags([...tags, event.target.value]);
-        setallTags((prevData: any) => [...prevData, tag]);
-        selectedTags([...tags, event.target.value]);
+      if (event.target.value !== item.keyword){
+        const tag = { keyword: event.target.value, type:"", collisionId: "" };
+        setAllTags((prevData: any) => [...prevData, tag]);
+        event.target.value = '';
+      } else {
         event.target.value = '';
       }
     })
   };
   const addSkills = (tag: any) => {
     ref.current.value = '';
-    setallTags((prevData: any) => [...prevData, tag]);
-    setTags([...tags, tag.keyword]);
-    selectedTags([...tags, tag.keyword]);
+    setAllTags((prevData: any) => [...prevData, tag]);
     setgroupTitle(null);
     setgetSkills(null);
   };

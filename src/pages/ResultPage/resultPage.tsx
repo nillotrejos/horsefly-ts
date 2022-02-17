@@ -11,7 +11,7 @@ interface ResultPageProps {
   setIsLoading: any;
   resultPageData: any;
   selectLocationData: any;
-  setInputList:any
+  setCompleteLocationData:any
   settagsSuggestions:any
   setresultPageData:any
 }
@@ -19,7 +19,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
   setIsLoading,
   resultPageData,
   selectLocationData,
-  setInputList,
+  setCompleteLocationData,
   settagsSuggestions,
   setresultPageData
 }) => {
@@ -39,7 +39,7 @@ const ResultPage: React.FC<ResultPageProps> = ({
 
   const toggler = () => {
     setIsLoading(setIsLoading(true));
-    setInputList([{ country: '', location: '', radius: '' }])
+    setCompleteLocationData([{ country: '', location: '', radius: '' }])
     settagsSuggestions([])
     setresultPageData([])
     
