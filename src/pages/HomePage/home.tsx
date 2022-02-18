@@ -28,15 +28,18 @@ import {
 } from '../../features/homepageSlice';
 
 const HomePage = () => {
-  const [completeLocationData, setCompleteLocationData] = React.useState([
-    { country: '', location: '', radius: '' }
+  const [completeLocationData, setCompleteLocationData] = React.useState<any>([
+    { country: '', location: '', radius: '', cityFound: false }
   ]);
+  const [locationHandler, setLocationHandler] = React.useState<any>({
+    country: '', location: '', radius: '', cityFound: false
+  })
   const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]); //search group in which tags will be added separately
 
   const [country, setcountry] = React.useState(''); ///don't know what is this
   const [currency, setCurrency] = React.useState('US Dollar'); //currency is set here
   const [isLoading, setIsLoading] = React.useState(false);
-  
+
   const [allTags, setAllTags] = React.useState<any>([]);
   const [groupTitle, setgroupTitle] = React.useState([]); //tag inputValue will be added here
 
@@ -44,11 +47,11 @@ const HomePage = () => {
   const [filterCities, setFilterCities] = React.useState<any>([]); //for cities suggestion dropdown
 
   const [getSkills, setgetSkills] = React.useState([]); //skill suggestion dropdown
-  
+
   const [filterBox, setFilterBox] = React.useState(false); //filter box is open or not
   const [filterBoxData, setfilterBoxData] = React.useState(''); //filter box data
   const [selectLocationData, setSelectLocationData] = React.useState<any>([]); //to store selected location data
-  
+
   const [allTagsData, setallTagsData] = React.useState([]); //to store selected tags data
   const [resultPageData, setresultPageData] = React.useState([]); //don't know what is this
   const [selectListTag, settagsSuggestions] = React.useState<any>([]); //last selected tag is stored here
@@ -57,44 +60,65 @@ const HomePage = () => {
   const [cityFound, setCityFound] = React.useState(false); //it will true when city location is selected
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.userData.location); //userLocation
-  
-  
-  
-  const locationGroupHandler = async (e: any, index: number) => {
-    let location = {country: e, location: '', radius: ''};
-    console.log(completeLocationData[index]);
-    console.log(location);
-    console.log(index);
-    // setCompleteLocationData([
-    //   { country: e, location: '', radius: '' }
-    // ])
-    // getCitiesData(e)
+
+
+
+  const changeHandler = async (e: any, i: any) => {
+    const { name, value } = e.target;
+    setLocationHandler(
+      { ...locationHandler, [name]: value }
+    )
+    if (name === 'country') {
+      getCitiesData(value, i);
+    }
+
+    if (name === 'location' && locationHandler.country !== '') {
+      let cityFound = await getCitiesData(value, i);
+      console.log(cityFound, "cityFound");
+    }
+    // let location = { country: e, location: '', radius: '', cityFound: false };
+    // getCitiesData(e, index);
+    // completeLocationData[index] = location;
   }
-  
+  console.log("handler", locationHandler);
+
+  const cityChangeHandler = async (e: any, index: number) => {
+    let tempCityLocation: { country: any; location: any; radius: any, cityFound: any };
+    tempCityLocation = { country: completeLocationData[index]?.country, location: e, radius: completeLocationData[index]?.radius, cityFound: completeLocationData[index]?.cityFound };
+    const cityFound = await getCitiesData(e, index);
+    completeLocationData[index] = { ...tempCityLocation, cityFound: cityFound[0] };
+    console.log(tempCityLocation);
+  }
+
+  const radiusChangeHandler = (e: any, index: number) => {
+    let tempRadiusLocation: { country: any; location: any; radius: any };
+    tempRadiusLocation = { country: completeLocationData[index]?.country, location: completeLocationData[index]?.location, radius: e };
+    completeLocationData[index] = tempRadiusLocation;
+  }
+
   const locationData = (cities: any, i: number) => {
     //use to select city location  
     const countryData: any = countriesList?.find(
       (country: any) => country.code === completeLocationData[i]?.country
-      );
-      
-      const subContinent = countryData.continent;
-      const country = countryData.code;
-      const region = cities.region || 'all';
-      const city = cities.city || 0;
-      const locationId = cities.locationId || 0;
-      const radius = completeLocationData[i]?.radius || '';
-      
-      const data = {
-        subContinent,
-        country,
-        region,
-        city,
-        locationId,
-        radius
-      };
-      
-      //why sending data as object of object //need to check
-      setSelectLocationData([...selectLocationData, data]);
+    );
+
+    const subContinent = countryData.continent;
+    const country = countryData.code;
+    const region = cities.region || 'all';
+    const city = cities.city || 0;
+    const locationId = cities.locationId || 0;
+    const radius = completeLocationData[i]?.radius || '';
+    const data = {
+      subContinent,
+      country,
+      region,
+      city,
+      locationId,
+      radius
+    };
+
+    //why sending data as object of object //need to check
+    setSelectLocationData([...selectLocationData, data]);
     dispatch(setCurrentUserLocation({ data }));
 
     //set selected location data
@@ -113,14 +137,20 @@ const HomePage = () => {
     }
   };
 
-  const getCitiesData = async (location: any, i: number) => {
-    const response = await getCities(completeLocationData[i]?.country, location);
+  const getCitiesData = async (cityInputValue: any, i: number) => {
+    const response = await getCities(completeLocationData[i]?.country, cityInputValue);
     setFilterCities(response);
-    response.map(city => {
+    return response.map((city: any) => {
       let cityName = new RegExp(city.displayName, 'g')
-      let city2 = completeLocationData[i]?.location.match(cityName)
-      if (city2) setCityFound(true)
-      else setCityFound(false)
+      let city2 = cityInputValue.match(cityName)
+      if (city2) {
+        completeLocationData[i].cityFound = true
+        return true
+      }
+      else {
+        completeLocationData[i].cityFound = false
+        return false
+      }
     })
   };
 
@@ -253,15 +283,16 @@ const HomePage = () => {
                 <FilterBox
                   setfilterBoxData={setfilterBoxData} />
               ) : null}
-              {completeLocationData?.map((value, i) => {
+              {completeLocationData?.map((value: any, i: number) => {
                 return (
                   <>
                     <div key={i} className={style.selectInputContainer}>
                       <SelectDropDown
+                        name="country"
                         items={countriesList}
                         className={style.dropdown}
                         handler={(e) => {
-                          locationGroupHandler(e, i);
+                          changeHandler(e, i);
                         }
                         }
                         title={value.country}
@@ -277,32 +308,18 @@ const HomePage = () => {
                           type="text"
                           placeholder="Location"
                           name="location"
-                          onChange={(e) =>
-                            setCompleteLocationData((prev) => {
-                              const newList: any = [...prev];
-                              newList[i].location = e.target.value;
-                              getCitiesData(e.target.value, i);
-                              return newList;
-                            })
-                          }
+                          onChange={(e) => changeHandler(e, i)}
                           className={`${style.dropdown1}`}
-                          value={value.location}
+                          value={locationHandler.location}
                         />
                       </div>
-
-
                       <SelectDropDown
-                        disable={cityFound ? false : true}
+                        name="radius"
+                        disable={value.cityFound ? false : true}
                         items={RADIUS}
                         className={style.dropdown2}
                         // handler={setradius}
-                        handler={(e) =>
-                          setCompleteLocationData((prev) => {
-                            const newList: any = [...prev];
-                            newList[i].radius = e;
-                            return newList;
-                          })
-                        }
+                        handler={(e) => changeHandler(e, i)}
                         captionKey="radius"
                         title="Radius"
                         extra="mi"
@@ -463,8 +480,8 @@ const HomePage = () => {
 
                 <div style={{ maxHeight: 200, overflow: 'scroll' }}>
                   {groupTitle && <div
-                   onClick={()=>{addSkills(groupTitle)}}
-                  className={style.skillDropdown}>
+                    onClick={() => { addSkills(groupTitle) }}
+                    className={style.skillDropdown}>
                     <button className={style.button}>Add {groupTitle}</button>
                   </div>}
                   {groupTitle?.length &&

@@ -8,11 +8,12 @@ interface SelectDropDownProps {
   captionKey?: any;
   className?: string;
   items?: any;
-  handler: (value: string) => void;
+  handler: (event: any) => void;
   disable?: boolean;
   selected?: string;
-  title?: string
-  extra?: string
+  title?: string;
+  extra?: string;
+  name?: string;
 }
 
 const SelectDropDown = ({
@@ -20,16 +21,18 @@ const SelectDropDown = ({
   className,
   items,
   disable,
-  extra
+  extra,
+  name,
 }: SelectDropDownProps) => {
 
   return (
     <select
+      name={name}
       className={className}
       disabled={disable}
-      onChange={(e) => handler(e.target.value)}
+      // value={value}
+      onChange={(e) => handler(e)}
     >
-
       {items?.map((item: ItemProps, index: number) => (
         <option key={index} value={item?.code}>
           {item?.name} {extra ? extra : null}
