@@ -4,21 +4,21 @@ import style from './tags.module.scss';
 
 interface TagsProps {
   setcount: any;
-  selectedTags: any;
   setgroupTitle: any;
-  value: string;
+  value: any;
   getSkills?: any;
   setgetSkills: any;
   groupTitle?: any;
   setallTagsData: any;
   selectListTag: any;
-  settagsSuggestionList: any;
-  tagsSuggestionList: any;
+  settagsSuggestionList?: any;
+  tagsSuggestionList?: any;
   isChecked: boolean;
+  index:number
+
 }
 
 const Tags: React.FC<TagsProps> = ({
-  selectedTags,
   setcount,
   setgroupTitle,
   setgetSkills,
@@ -26,13 +26,12 @@ const Tags: React.FC<TagsProps> = ({
   selectListTag,
   settagsSuggestionList,
   isChecked,
-  getSkills,
-  tagsSuggestionList,
-}) => {
-  const [tags, setTags] = React.useState<any>([]);
-  const [allTags, setallTags] = React.useState<any>([]);
-  const ref = useRef<any>();
 
+}) => {
+  const [allTags, setallTags] = React.useState<any>([]);
+  const [tags, setTags] = React.useState<any>([]);
+  const ref = useRef<any>();
+console.log(allTags,'allTags')
   const suggestionTagData = async () => {
     const response = await suggestionTag(allTags);
     settagsSuggestionList(response);
@@ -44,18 +43,17 @@ const Tags: React.FC<TagsProps> = ({
       firstUpdate.current = false;
       return;
     }
-    console.log('worked')
     addSkills(selectListTag)
   }, [selectListTag]);
   
   useMemo(() => suggestionTagData(), [allTags]);
 
   React.useEffect(() => {
-    allTags.length > 0 && suggestionTagData();
+    allTags?.length > 0 && suggestionTagData();
   }, [allTags]);
 
   React.useEffect(() => {
-    if (allTags.length > 0){
+    if (allTags?.length > 0){
       setallTagsData(allTags);
       setcount(tags);
     }
@@ -66,25 +64,22 @@ const Tags: React.FC<TagsProps> = ({
       ...tags.filter((_: any, index: number) => index !== indexToRemove)
     ]);
     setallTags([
-      ...allTags.filter((_: any, index: number) => index !== indexToRemove)
+      ...allTags?.filter((_: any, index: number) => index !== indexToRemove)
     ]);
   };
+
   const addTags = (event: any) => {
-    getSkills.map((item: any) => {
-      if (event.target.value === item.keyword){
-        const tag = { keyword: event.target.value, type: item.type, collisionId: item.collisionId };
-        setTags([...tags, event.target.value]);
-        setallTags((prevData: any) => [...prevData, tag]);
-        selectedTags([...tags, event.target.value]);
-        event.target.value = '';
-      }
-    })
+    const tag = { keyword: event.target.value, type: 'unknown' };
+    if (event.target.value !== '') {
+      setTags([...tags, event.target.value]);
+      setallTags([...allTags,tag]);
+      event.target.value = '';
+    } 
   };
   const addSkills = (tag: any) => {
     ref.current.value = '';
-    setallTags((prevData: any) => [...prevData, tag]);
     setTags([...tags, tag.keyword]);
-    selectedTags([...tags, tag.keyword]);
+    setallTags([...allTags,tag]);
     setgroupTitle(null);
     setgetSkills(null);
   };
@@ -92,7 +87,7 @@ const Tags: React.FC<TagsProps> = ({
     <>
       <div className={style.tagsInput}>
         <ul className={style.tagss}>
-          {allTags.length > 0 && allTags?.map((tag: string, index: number) => (
+          {allTags?.length > 0 && allTags?.map((tag: any, index: number) => (
             <li key={index} className={style.tag}>
               <span
                 className={

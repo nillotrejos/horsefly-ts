@@ -44,10 +44,8 @@ export const suggestionTag = async (allTags: any) => {
 
 export const demand = async (location: any, filterBox: any, tagData: any, country: any, currency: any) => {
 
-  // [{},{"subContinent":"south asia","country":"in","region":"west bengal","city":"kolkata","locationId":"fa0daf330d0b1e41782eb05feca8b7d8","radius":""}]
-  // const locationData = JSON.stringify([{"subContinent":"south asia","country":"in","region":"west bengal","city":"kolkata","locationId":"fa0daf330d0b1e41782eb05feca8b7d8","radius":"0"}])
-  const locationData = JSON.stringify([location])
-  const filter = JSON.stringify(filterBox)
+  const locationData = JSON.stringify(location)
+  const filter = JSON.stringify(filterBox || {"male":1,"female":1,"yoe0":1,"yoe1":1,"yoe2":1})
   const tag = JSON.stringify({ "or": [{ "include": 1, "keywords": tagData }] })
   const url = `${endpoint}list/search/demand`;
   const body = new FormData();

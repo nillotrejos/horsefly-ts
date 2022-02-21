@@ -33,10 +33,9 @@ const HomePage = () => {
     { country: '', location: '', radius: '' }
   ]);
 
-  const [searchGroups, setSearchGroups] = React.useState([{ group: '' }]);
+  const [searchGroups, setSearchGroups] = React.useState([{}]);
   const [country, setcountry] = React.useState('');
   const [radius, setradius] = React.useState('5');
-  const [tags, setTags] = React.useState<any>([]);
   const [currency, setCurrency] = React.useState('US Dollar');
   const [isLoading, setIsLoading] = React.useState(false);
   const [count, setcount] = React.useState([]);
@@ -55,10 +54,11 @@ const HomePage = () => {
   const [cityFound, setCityFound] = React.useState(false);
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.userData.location);
-
+  // const [allTags, setallTags] = React.useState<any>([]);
+console.log({getSkills,allTagsData})
   const locationData = (cities: any, i: number) => {
     const countryData: any = allCountries?.find(
-      (country: any) => country.code === inputList[i]?.country
+      (country: any) => country?.code === inputList[i]?.country
     );
 
     const subContinent = countryData.continent;
@@ -160,16 +160,16 @@ const HomePage = () => {
   };
 
   const searchGroupHandler = () => {
-    setSearchGroups([...searchGroups, { group: '' }]);
+    setSearchGroups([...searchGroups, allTagsData ]);
+
+
   };
   const searchRemoveClick = (index: any) => {
     const list = [...searchGroups];
-    list.splice(index, 1);
+    list.splice(index,1);
     setSearchGroups(list);
   };
-  const selectedTags = (tags: any) => {
-    setTags((prevTags: any) => [...prevTags, tags]);
-  };
+
 
   if (typeof window === 'object') {
     let doc = document.querySelector('body')
@@ -251,12 +251,16 @@ const HomePage = () => {
                         items={allCountries}
                         className={style.dropdown}
                         handler={(e) => {
-                          setInputList([
-                            { country: e, location: '', radius: '' }
-                          ])
+                         setInputList((prev) => {
+                            const newList: any = [...prev];
+                            newList[i].country = e;
+                            return newList;
+                          })
                           getCitiesData(e)
                         }
                         }
+
+                        
                         title={value.country}
                       />
                       <div
@@ -412,6 +416,7 @@ const HomePage = () => {
                           <div
                             className={style.discardIconBtn}
                             onClick={() => searchRemoveClick(index)}
+
                             >
                             <MdDoNotDisturbOn />
                             <Button
@@ -425,17 +430,14 @@ const HomePage = () => {
                       <Tags
                         setgroupTitle={setgroupTitle}
                         setcount={setcount}
-                        selectedTags={selectedTags}
-                        value={''}
-                        getSkills={getSkills}
+                        value={[val]}
+                        index={index}
                         setgetSkills={setgetSkills}
-                        groupTitle={groupTitle}
+                        groupTitle={groupTitle} 
                         setallTagsData={setallTagsData}
                         selectListTag={selectListTag}
-                        tagsSuggestionList={tagsSuggestionList}
                         settagsSuggestionList={settagsSuggestionList}
-                        isChecked={isChecked}
-                        />
+                        isChecked={isChecked}/>
                     </div>
                   );
                 })}
